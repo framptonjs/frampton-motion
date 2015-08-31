@@ -1,0 +1,28 @@
+{
+  "name": "frampton-motion",
+  "version": "0.0.1",
+  "description": "",
+  "main": "packages.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kevin Greene <hightimesteddy@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framptonjs/frampton-motion.git"
+  },
+  "bugs": {
+    "url": "https://github.com/framptonjs/frampton-motion/issues"
+  },
+  "homepage": "https://github.com/framptonjs/frampton-motion",
+  "devDependencies": {
+    "broccoli": "^0.16.2",
+    "broccoli-cli": "^1.0.0",
+    "frampton-build": "*",
+    "qunitjs": "^1.16.0"
+  }
+}
