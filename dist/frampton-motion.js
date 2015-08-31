@@ -25,7 +25,7 @@ define('frampton-motion', ['exports', 'frampton/namespace', 'frampton-motion/tra
   var _when = _interopRequireDefault(_framptonMotionWhen);
 
   _Frampton['default'].Motion = {};
-  _Frampton['default'].Motion.transition = _framptonMotionTransition.transition;
+  _Frampton['default'].Motion.describe = _framptonMotionTransition.describe;
   _Frampton['default'].Motion.sequence = _sequence['default'];
   _Frampton['default'].Motion.when = _when['default'];
 });
@@ -202,7 +202,7 @@ define('frampton-motion/set_state', ['exports', 'module'], function (exports, mo
     transition.state = state;
   }
 });
-define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'frampton-utils/immediate', 'frampton-utils/is_something', 'frampton-utils/is_string', 'frampton-utils/is_object', 'frampton-utils/guid', 'frampton-utils/noop', 'frampton-utils/not_implemented', 'frampton-list/add', 'frampton-list/remove', 'frampton-list/reverse', 'frampton-object/copy', 'frampton-object/merge', 'frampton-style/apply_styles', 'frampton-style/remove_styles', 'frampton-style/add_class', 'frampton-style/remove_class', 'frampton-events/event_dispatcher', 'frampton-motion/transition_end', 'frampton-motion/reflow', 'frampton-motion/set_state', 'frampton-motion/parsed_transitions', 'frampton-motion/parsed_props', 'frampton-motion/parsed_timing', 'frampton-motion/update_transform'], function (exports, _framptonUtilsAssert, _framptonUtilsImmediate, _framptonUtilsIs_something, _framptonUtilsIs_string, _framptonUtilsIs_object, _framptonUtilsGuid, _framptonUtilsNoop, _framptonUtilsNot_implemented, _framptonListAdd, _framptonListRemove, _framptonListReverse, _framptonObjectCopy, _framptonObjectMerge, _framptonStyleApply_styles, _framptonStyleRemove_styles, _framptonStyleAdd_class, _framptonStyleRemove_class, _framptonEventsEvent_dispatcher, _framptonMotionTransition_end, _framptonMotionReflow, _framptonMotionSet_state, _framptonMotionParsed_transitions, _framptonMotionParsed_props, _framptonMotionParsed_timing, _framptonMotionUpdate_transform) {
+define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'frampton-utils/immediate', 'frampton-utils/not', 'frampton-utils/is_empty', 'frampton-utils/is_something', 'frampton-utils/is_string', 'frampton-utils/is_object', 'frampton-utils/guid', 'frampton-utils/noop', 'frampton-utils/not_implemented', 'frampton-list/add', 'frampton-list/copy', 'frampton-list/remove', 'frampton-list/reverse', 'frampton-object/copy', 'frampton-object/merge', 'frampton-style/apply_styles', 'frampton-style/remove_styles', 'frampton-style/add_class', 'frampton-style/remove_class', 'frampton-events/event_dispatcher', 'frampton-motion/transition_end', 'frampton-motion/reflow', 'frampton-motion/set_state', 'frampton-motion/parsed_transitions', 'frampton-motion/parsed_props', 'frampton-motion/parsed_timing', 'frampton-motion/update_transform'], function (exports, _framptonUtilsAssert, _framptonUtilsImmediate, _framptonUtilsNot, _framptonUtilsIs_empty, _framptonUtilsIs_something, _framptonUtilsIs_string, _framptonUtilsIs_object, _framptonUtilsGuid, _framptonUtilsNoop, _framptonUtilsNot_implemented, _framptonListAdd, _framptonListCopy, _framptonListRemove, _framptonListReverse, _framptonObjectCopy, _framptonObjectMerge, _framptonStyleApply_styles, _framptonStyleRemove_styles, _framptonStyleAdd_class, _framptonStyleRemove_class, _framptonEventsEvent_dispatcher, _framptonMotionTransition_end, _framptonMotionReflow, _framptonMotionSet_state, _framptonMotionParsed_transitions, _framptonMotionParsed_props, _framptonMotionParsed_timing, _framptonMotionUpdate_transform) {
   'use strict';
 
   exports.__esModule = true;
@@ -212,6 +212,10 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
   var _assert = _interopRequireDefault(_framptonUtilsAssert);
 
   var _immediate = _interopRequireDefault(_framptonUtilsImmediate);
+
+  var _not = _interopRequireDefault(_framptonUtilsNot);
+
+  var _isEmpty = _interopRequireDefault(_framptonUtilsIs_empty);
 
   var _isSomething = _interopRequireDefault(_framptonUtilsIs_something);
 
@@ -227,11 +231,13 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 
   var _add = _interopRequireDefault(_framptonListAdd);
 
+  var _copyList = _interopRequireDefault(_framptonListCopy);
+
   var _remove = _interopRequireDefault(_framptonListRemove);
 
   var _reverse = _interopRequireDefault(_framptonListReverse);
 
-  var _copy = _interopRequireDefault(_framptonObjectCopy);
+  var _copyObj = _interopRequireDefault(_framptonObjectCopy);
 
   var _merge = _interopRequireDefault(_framptonObjectMerge);
 
@@ -272,6 +278,14 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
   function defaultRun(resolve) {
     var _this = this;
 
+    /**
+     * Force a reflow of our element to make sure everything is prestine for us
+     * to start fuckin' things up. Without doing this, some browsers will not have
+     * the correct current state of our element in which to start the transition
+     * from.
+     */
+    _reflow['default'](this.element);
+
     this.element.setAttribute('data-transition-id', this.id);
 
     var unsub = _framptonEventsEvent_dispatcher.addListener(_transitionend['default'], function (evt) {
@@ -288,55 +302,53 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 
     setDirection(this, this.direction);
 
-    if (_isSomething['default'](this.frame)) {
-      _applyStyles['default'](this.element, this.config);
-      _reflow['default'](this.element);
-      if (this.direction === Transition.DIR_IN) {
+    if (this.direction === Transition.DIR_IN) {
+      this.classList.forEach(_addClass['default'](this.element));
+      if (_isSomething['default'](this.frame)) {
+        _applyStyles['default'](this.element, this.config);
+        _reflow['default'](this.element);
         _applyStyles['default'](this.element, this.supported);
-      } else {
-        _removeStyles['default'](this.element, this.supported);
       }
     } else {
-      _reflow['default'](this.element);
-      if (this.direction === Transition.DIR_IN) {
-        this.classList.forEach(_addClass['default'](this.element));
-      } else {
-        this.classList.forEach(_removeClass['default'](this.element));
+      this.classList.forEach(_removeClass['default'](this.element));
+      if (_isSomething['default'](this.frame)) {
+        _applyStyles['default'](this.element, this.config);
+        _reflow['default'](this.element);
+        _removeStyles['default'](this.element, this.supported);
       }
     }
 
     _setState['default'](this, Transition.RUNNING);
   }
 
-  function withDefaultRun(element, frame, dir) {
-    var trans = new Transition(element, frame, dir);
+  function withDefaultRun(element, list, frame, dir) {
+    var trans = new Transition(element, list, frame, dir);
     trans.run = defaultRun;
     return trans;
   }
 
   function withFrame(transition, props) {
 
-    var frame = _isSomething['default'](transition.frame) ? _copy['default'](transition.frame) : {};
+    var frame = _isSomething['default'](transition.frame) ? _copyObj['default'](transition.frame) : {};
 
     for (var key in props) {
       frame[key] = props[key];
     }
 
-    return withDefaultRun(transition.element, frame, transition.direction);
+    return withDefaultRun(transition.element, _copyList['default'](transition.classList), frame, transition.direction);
   }
 
-  function Transition(element, frame, dir) {
+  function Transition(element, list, frame, dir) {
 
     _assert['default']('Browser does not support CSS transitions', _isSomething['default'](_transitionend['default']));
 
     this.id = _guid['default']();
-    this.element = element || null;
-    this.direction = dir || Transition.DIR_IN;
-    this.frame = null;
+    this.element = _isSomething['default'](element) ? element : null;
+    this.direction = _isSomething['default'](dir) ? dir : Transition.DIR_IN;
+    this.frame = _isSomething['default'](frame) ? frame : null;
     this.config = null;
     this.supported = null;
-    this.outFrame = null;
-    this.classList = [];
+    this.classList = (_isSomething['default'](list) ? list : []).filter(_not['default'](_isEmpty['default']));
     this.state = Transition.WAITING;
     this.list = [this];
 
@@ -344,8 +356,6 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
       this.frame = frame;
       this.supported = _parsedProps['default'](frame);
       this.config = _merge['default'](_parsedTiming['default'](frame), _parsedTransitions['default'](this.supported));
-    } else {
-      this.classList = _isString['default'](frame) ? frame.trim().split(' ') : [];
     }
 
     _setState['default'](this, this.state);
@@ -555,7 +565,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    * @returns {Transition}
    */
   Transition.prototype.addClass = function Transition_addClass(name) {
-    return withDefaultRun(this.element, _add['default'](this.classList, name), this.direction);
+    return withDefaultRun(this.element, _add['default'](this.classList, name), _isSomething['default'](this.frame) ? _copyObj['default'](this.frame) : null, this.direction);
   };
 
   /**
@@ -566,7 +576,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    * @returns {Transition}
    */
   Transition.prototype.removeClass = function Transition_removeClass(name) {
-    return withDefaultRun(this.element, _remove['default'](this.classList, name), this.direction);
+    return withDefaultRun(this.element, _remove['default'](this.classList, name), _isSomething['default'](this.frame) ? _copyObj['default'](this.frame) : null, this.direction);
   };
 
   /**
@@ -576,7 +586,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    * @returns {Transition}
    */
   Transition.prototype.reverse = function Transition_reverse() {
-    return withDefaultRun(this.element, _isSomething['default'](this.frame) ? _copy['default'](this.frame) : this.classList.join(' '), inverseDirection(this.direction));
+    return withDefaultRun(this.element, _copyList['default'](this.classList), _isSomething['default'](this.frame) ? _copyObj['default'](this.frame) : null, inverseDirection(this.direction));
   };
 
   /**
@@ -621,12 +631,19 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
   Transition.DIR_IN = 'transition-in';
   Transition.DIR_OUT = 'transition-out';
 
-  function transitionCreate(element, frame) {
-    return withDefaultRun(element, frame);
+  function describe(element, name, frame, dir) {
+
+    if (_isObject['default'](name)) {
+      dir = frame;
+      frame = name;
+      name = null;
+    }
+
+    return withDefaultRun(element, _isString['default'](name) ? name.split(' ') : null, _isObject['default'](frame) ? frame : null, _isString['default'](dir) ? dir : Transition.DIR_IN);
   }
 
   exports.Transition = Transition;
-  exports.transition = transitionCreate;
+  exports.describe = describe;
 });
 define('frampton-motion/transition_end', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
   'use strict';

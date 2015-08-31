@@ -1,5 +1,7 @@
 import assert from 'frampton-utils/assert';
 import immediate from 'frampton-utils/immediate';
+import not from 'frampton-utils/not';
+import isEmpty from 'frampton-utils/is_empty';
 import isSomething from 'frampton-utils/is_something';
 import isString from 'frampton-utils/is_string';
 import isObject from 'frampton-utils/is_object';
@@ -7,9 +9,10 @@ import guid from 'frampton-utils/guid';
 import noop from 'frampton-utils/noop';
 import notImplemented from 'frampton-utils/not_implemented';
 import add from 'frampton-list/add';
+import copyList from 'frampton-list/copy';
 import remove from 'frampton-list/remove';
 import reverse from 'frampton-list/reverse';
-import copy from 'frampton-object/copy';
+import copyObj from 'frampton-object/copy';
 import merge from 'frampton-object/merge';
 import applyStyles from 'frampton-style/apply_styles';
 import removeStyles from 'frampton-style/remove_styles';
@@ -38,6 +41,14 @@ function setDirection(transition, dir) {
 
 function defaultRun(resolve) {
 
+  /**
+   * Force a reflow of our element to make sure everything is prestine for us
+   * to start fuckin' things up. Without doing this, some browsers will not have
+   * the correct current state of our element in which to start the transition
+   * from.
+   */
+  reflow(this.element);
+
   this.element.setAttribute('data-transition-id', this.id);
 
   var unsub = addListener(transitionend, (evt) => {
@@ -54,35 +65,34 @@ function defaultRun(resolve) {
 
   setDirection(this, this.direction);
 
-  if (isSomething(this.frame)) {
-    applyStyles(this.element, this.config);
-    reflow(this.element);
-    if (this.direction === Transition.DIR_IN) {
+  if (this.direction === Transition.DIR_IN) {
+    this.classList.forEach(addClass(this.element));
+    if (isSomething(this.frame)) {
+      applyStyles(this.element, this.config);
+      reflow(this.element);
       applyStyles(this.element, this.supported);
-    } else {
-      removeStyles(this.element, this.supported);
     }
   } else {
-    reflow(this.element);
-    if (this.direction === Transition.DIR_IN) {
-      this.classList.forEach(addClass(this.element));
-    } else {
-      this.classList.forEach(removeClass(this.element));
+    this.classList.forEach(removeClass(this.element));
+    if (isSomething(this.frame)) {
+      applyStyles(this.element, this.config);
+      reflow(this.element);
+      removeStyles(this.element, this.supported);
     }
   }
 
   setState(this, Transition.RUNNING);
 }
 
-function withDefaultRun(element, frame, dir) {
-  var trans = new Transition(element, frame, dir);
+function withDefaultRun(element, list, frame, dir) {
+  var trans = new Transition(element, list, frame, dir);
   trans.run = defaultRun;
   return trans;
 }
 
 function withFrame(transition, props) {
 
-  var frame = (isSomething(transition.frame) ? copy(transition.frame) : {});
+  var frame = (isSomething(transition.frame) ? copyObj(transition.frame) : {});
 
   for (let key in props) {
     frame[key] = props[key];
@@ -90,23 +100,23 @@ function withFrame(transition, props) {
 
   return withDefaultRun(
     transition.element,
+    copyList(transition.classList),
     frame,
     transition.direction
   );
 }
 
-function Transition(element, frame, dir) {
+function Transition(element, list, frame, dir) {
 
   assert('Browser does not support CSS transitions', isSomething(transitionend));
 
   this.id        = guid();
-  this.element   = (element || null);
-  this.direction = (dir || Transition.DIR_IN);
-  this.frame     = null;
+  this.element   = (isSomething(element) ? element : null);
+  this.direction = (isSomething(dir) ? dir : Transition.DIR_IN);
+  this.frame     = (isSomething(frame) ? frame : null);
   this.config    = null;
   this.supported = null;
-  this.outFrame  = null;
-  this.classList = [];
+  this.classList = (isSomething(list) ? list : []).filter(not(isEmpty));
   this.state     = Transition.WAITING;
   this.list      = [this];
 
@@ -117,8 +127,6 @@ function Transition(element, frame, dir) {
       parsedTiming(frame),
       parsedTransitions(this.supported)
     );
-  } else {
-    this.classList = (isString(frame) ? frame.trim().split(' ') : []);
   }
 
   setState(this, this.state);
@@ -351,6 +359,7 @@ Transition.prototype.addClass = function Transition_addClass(name) {
   return withDefaultRun(
     this.element,
     add(this.classList, name),
+    (isSomething(this.frame) ? copyObj(this.frame) : null),
     this.direction
   );
 };
@@ -366,6 +375,7 @@ Transition.prototype.removeClass = function Transition_removeClass(name) {
   return withDefaultRun(
     this.element,
     remove(this.classList, name),
+    (isSomething(this.frame) ? copyObj(this.frame) : null),
     this.direction
   );
 };
@@ -379,7 +389,8 @@ Transition.prototype.removeClass = function Transition_removeClass(name) {
 Transition.prototype.reverse = function Transition_reverse() {
   return withDefaultRun(
     this.element,
-    (isSomething(this.frame) ? copy(this.frame) : this.classList.join(' ')),
+    copyList(this.classList),
+    (isSomething(this.frame) ? copyObj(this.frame) : null),
     inverseDirection(this.direction)
   );
 };
@@ -426,11 +437,23 @@ Transition.CLEANUP = 'cleanup';
 Transition.DIR_IN  = 'transition-in';
 Transition.DIR_OUT = 'transition-out';
 
-function transitionCreate(element, frame) {
-  return withDefaultRun(element, frame);
+function describe(element, name, frame, dir) {
+
+  if (isObject(name)) {
+    dir = frame;
+    frame = name;
+    name = null;
+  }
+
+  return withDefaultRun(
+    element,
+    (isString(name) ? name.split(' ') : null),
+    (isObject(frame) ? frame : null),
+    (isString(dir) ? dir : Transition.DIR_IN)
+  );
 }
 
 export {
   Transition,
-  transitionCreate as transition
+  describe as describe
 };
