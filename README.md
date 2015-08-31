@@ -1,6 +1,6 @@
 # Frampton-Motion
 
-Managing CSS transitions and animations in JavaScript are a perfect opportunity to flex a little functional muscle. Most code surrounding what transitions and animations should do and how they should behave is pure. It's declarative and doesn't do anything except say what we want to happen. If our descriptions are horrible and have no chance at success, there's still no reason that those descriptions can't be maintained by immutable data structures and a declarative API. The actual performance of the transition or animation is what causes side effect and is what can go horribly wrong. We'll keep that stuff in a corner somewhere so the rest of our code is declarative and beautiful.
+Managing CSS transitions and animations in JavaScript are a perfect opportunity to flex a little functional muscle. Most code surrounding what transitions and animations should do and how they should behave is pure. It's declarative and doesn't do anything except say what we want to happen. If our descriptions are horrible and have no chance at success, there's still no reason that those descriptions can't be maintained by immutable data structures and a declarative API. The actual performance of the transition or animation is what causes side effects and is what can go horribly wrong. We'll keep that stuff in a corner somewhere so the rest of our code is declarative and beautiful.
 
 This module will add objects and functions to Frampton to manage CSS transitions is a declarative manner.
 
@@ -21,7 +21,7 @@ var element = document.getElementById('some-id');
 // Transitions can be created with a class name to add to cause the transition.
 var myTransition = transition(element, 'my-class');
 
-// Transitions can also be created with a has of properties to apply to the element.
+// Transitions can also be created with a hash of properties to apply to the element.
 var otherTransition = transition(element, {
   opacity : 0,
   transform : 'scale(0.6)',
@@ -56,7 +56,7 @@ var hideModal = showModal.reverse();
 
 If you chain two transitions together that don't change anything, or do the same thing, there will be nothing for one or both of them to transition, no transition means no transitionend event means the chain is broken.
 
-#### A Know Issue
+#### A Known Issue
 
 Where this will most likely come into play is with reverse. When you reverse a Transition you just undo the Transition you called it on. If a Transition adds a class, reversing it removes the class. The same for css properties, the reverse of adding a property is removing it. So if I chain two Transitions that update the same property then reverse that chained Transition, the first Transition will remove the property and the second Transition will have nothing to do.
 
