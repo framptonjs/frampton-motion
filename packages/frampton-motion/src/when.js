@@ -18,6 +18,8 @@ import { Transition } from 'frampton-motion/transition';
 export default function when(...transitions) {
 
   var transition = new Transition();
+  transition.name = Transition.WHEN;
+  transition.list = transitions;
 
   transition.reverse = function when_reverse() {
     return when.apply(null, transitions.map((trans) => {
@@ -25,19 +27,17 @@ export default function when(...transitions) {
     }));
   };
 
-  transition.run = function when_run(resolve) {
+  transition.run = function when_run(resolve, child) {
 
     var len = transitions.length;
-    var count = 0;
 
-    transitions.forEach((trans) => {
-      trans.run(() => {
-        count = count + 1;
-        if (count === len) {
+    for (let i=0;i<len;i++) {
+      transitions[i].run(() => {
+        if (i === (len - 1)) {
           (resolve || noop)();
         }
-      });
-    });
+      }, child);
+    }
   };
 
   return transition;

@@ -12,13 +12,15 @@ import add from 'frampton-list/add';
 import copyList from 'frampton-list/copy';
 import remove from 'frampton-list/remove';
 import reverse from 'frampton-list/reverse';
-import copyObj from 'frampton-object/copy';
 import merge from 'frampton-object/merge';
+import setStyle from 'frampton-style/set_style';
 import applyStyles from 'frampton-style/apply_styles';
+import removeStyle from 'frampton-style/remove_style';
 import removeStyles from 'frampton-style/remove_styles';
 import addClass from 'frampton-style/add_class';
 import removeClass from 'frampton-style/remove_class';
 import { addListener } from 'frampton-events/event_dispatcher';
+import sequence from 'frampton-motion/sequence';
 import transitionend from 'frampton-motion/transition_end';
 import reflow from 'frampton-motion/reflow';
 import setState from 'frampton-motion/set_state';
@@ -26,6 +28,7 @@ import parsedTransitions from 'frampton-motion/parsed_transitions';
 import parsedProps from 'frampton-motion/parsed_props';
 import parsedTiming from 'frampton-motion/parsed_timing';
 import updateTransform from 'frampton-motion/update_transform';
+import normalizedFrame from 'frampton-motion/normalized_frame';
 
 function inverseDirection(dir) {
   return ((dir === Transition.DIR_IN) ? Transition.DIR_OUT : Transition.DIR_IN);
@@ -39,7 +42,7 @@ function setDirection(transition, dir) {
   transition.direction = dir;
 }
 
-function defaultRun(resolve) {
+function defaultRun(resolve, child) {
 
   /**
    * Force a reflow of our element to make sure everything is prestine for us
@@ -77,11 +80,52 @@ function defaultRun(resolve) {
     if (isSomething(this.frame)) {
       applyStyles(this.element, this.config);
       reflow(this.element);
-      removeStyles(this.element, this.supported);
+      resolveStyles(
+        this.element,
+        this.supported,
+        (isSomething(child) ? child : null)
+      );
     }
   }
 
   setState(this, Transition.RUNNING);
+}
+
+function findChild(child, element) {
+  if (child && child.element) {
+    return child;
+  } else if (child) {
+    if (child.name === Transition.WHEN) {
+      for (let i=0;i<child.list.length;i++) {
+        if (child.list[i].element === element) {
+          return child.list[i];
+        }
+      }
+    } else if (child.name === Transition.CHAINED) {
+      if (child.list[0].element === element) {
+        return child.list[0];
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * If we are transitioning
+ */
+function resolveStyles(element, frame, child) {
+  child = findChild(child, element);
+  if (child && child.direction === Transition.DIR_OUT && child.element === element) {
+    for (let key in frame) {
+      if (child.frame[key]) {
+        setStyle(element, key, child.frame[key]);
+      } else {
+        removeStyle(element, key);
+      }
+    }
+  } else {
+    removeStyles(element, frame);
+  }
 }
 
 function withDefaultRun(element, list, frame, dir) {
@@ -92,7 +136,7 @@ function withDefaultRun(element, list, frame, dir) {
 
 function withFrame(transition, props) {
 
-  var frame = (isSomething(transition.frame) ? copyObj(transition.frame) : {});
+  var frame = (isSomething(transition.frame) ? transition.frame : {});
 
   for (let key in props) {
     frame[key] = props[key];
@@ -111,17 +155,18 @@ function Transition(element, list, frame, dir) {
   assert('Browser does not support CSS transitions', isSomething(transitionend));
 
   this.id        = guid();
+  this.name      = Transition.NORMAL;
   this.element   = (isSomething(element) ? element : null);
   this.direction = (isSomething(dir) ? dir : Transition.DIR_IN);
-  this.frame     = (isSomething(frame) ? frame : null);
+  this.frame     = (isSomething(frame) ? normalizedFrame(frame) : null);
   this.config    = null;
   this.supported = null;
   this.classList = (isSomething(list) ? list : []).filter(not(isEmpty));
   this.state     = Transition.WAITING;
   this.list      = [this];
+  this.timeout   = Transition.TIMEOUT;
 
   if (isObject(frame)) {
-    this.frame = frame;
     this.supported = parsedProps(frame);
     this.config = merge(
       parsedTiming(frame),
@@ -359,7 +404,7 @@ Transition.prototype.addClass = function Transition_addClass(name) {
   return withDefaultRun(
     this.element,
     add(this.classList, name),
-    (isSomething(this.frame) ? copyObj(this.frame) : null),
+    (isSomething(this.frame) ? this.frame : null),
     this.direction
   );
 };
@@ -375,7 +420,7 @@ Transition.prototype.removeClass = function Transition_removeClass(name) {
   return withDefaultRun(
     this.element,
     remove(this.classList, name),
-    (isSomething(this.frame) ? copyObj(this.frame) : null),
+    (isSomething(this.frame) ? this.frame : null),
     this.direction
   );
 };
@@ -390,7 +435,7 @@ Transition.prototype.reverse = function Transition_reverse() {
   return withDefaultRun(
     this.element,
     copyList(this.classList),
-    (isSomething(this.frame) ? copyObj(this.frame) : null),
+    (isSomething(this.frame) ? this.frame : null),
     inverseDirection(this.direction)
   );
 };
@@ -399,31 +444,30 @@ Transition.prototype.reverse = function Transition_reverse() {
  * @name reverse
  * @memberOf Frampton.Motion.Transition
  * @instance
- * @param {Transition} transition Transition to run after this transition.
+ * @param {Transition} child Transition to run after this transition.
  * @returns {Transition}
  */
-Transition.prototype.chain = function Transition_chain(transition) {
+Transition.prototype.chain = function Transition_chain(child) {
 
   var trans = new Transition();
   var saved = this.run.bind(this);
 
-  trans.list = add(this.list, transition);
+  trans.name = Transition.CHAINED;
+  trans.list = add(this.list, child);
 
-  trans.run = function chain_run(resolve) {
+  trans.run = function chain_run(resolve, next) {
     saved(() => {
-      transition.run(resolve);
-    });
+      child.run(resolve, next);
+    }, child);
   };
 
   trans.reverse = function chain_reverse() {
-    var list = reverse(trans.list);
-    var len  = list.length;
-    var i    = 1;
-    var temp = list[0].reverse();
-    for (;i<len;i++) {
-      temp = temp.chain(list[i].reverse());
-    }
-    return temp;
+    return sequence.apply(
+      null,
+      reverse(trans.list).map((next) => {
+        return next.reverse();
+      })
+    );
   };
 
   return trans;
@@ -436,6 +480,10 @@ Transition.DONE    = 'done';
 Transition.CLEANUP = 'cleanup';
 Transition.DIR_IN  = 'transition-in';
 Transition.DIR_OUT = 'transition-out';
+Transition.NORMAL  = 'normal';
+Transition.CHAINED = 'chained';
+Transition.WHEN    = 'when';
+Transition.TIMEOUT = 3000;
 
 function describe(element, name, frame, dir) {
 

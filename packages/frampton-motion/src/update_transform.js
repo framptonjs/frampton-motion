@@ -7,10 +7,15 @@ function propValue(prop, value) {
 
 export default function updateTransform(transform, prop, value) {
   var reg;
-  transform = isString(transform) ? transform : '';
+  transform = (isString(transform) ? transform : '').trim();
+
   if (contains(prop, transform)) {
     reg = new RegExp(prop + "\\([^)]*\\)");
-    transform = transform.replace(reg, propValue(prop, value));
+    if (isString(value) && value.trim() !== '') {
+      transform = transform.replace(reg, propValue(prop, value));
+    } else {
+      transform = transform.replace(reg, '').replace('  ', ' ');
+    }
   } else {
     if (transform.length > 0) {
       transform = transform + ' ';

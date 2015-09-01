@@ -13,28 +13,28 @@ Just include this file after Frampton.
 
 ## Transitions
 
-Currently Motion exposes three public methods: transition, when and sequence.
+Currently Motion exposes three public methods: describe, when and sequence.
 
 ```
 var element = document.getElementById('some-id');
 
 // Transitions can be created with a class name to add to cause the transition.
-var myTransition = transition(element, 'my-class');
+var myTransition = describe(element, 'my-class');
 
 // Transitions can also be created with a hash of properties to apply to the element.
-var otherTransition = transition(element, {
+var otherTransition = describe(element, {
   opacity : 0,
   transform : 'scale(0.6)',
   duration : '500ms'
 });
 ```
 
-The transform function will automatically apply any vendor prefixes required by the browser running the code. It also aliases duration to transition-duration and delay to transition-delay to save a few key strokes.
+The describe function will automatically apply any vendor prefixes required by the browser running the code. It also aliases duration to transition-duration and delay to transition-delay to save a few key strokes.
 
 All methods on the Transition object, other than the run method, return a new Transition.
 
 ```
-var hide = transition(element, { opacity : 0 });
+var hide = describe(element, { opacity : 0 });
 var show = hide.reverse();
 
 var hideThenShow = hide.chain(show);
