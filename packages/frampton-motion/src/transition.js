@@ -110,14 +110,11 @@ function findChild(child, element) {
   return null;
 }
 
-/**
- * If we are transitioning
- */
 function resolveStyles(element, frame, child) {
   child = findChild(child, element);
   if (child && child.direction === Transition.DIR_OUT && child.element === element) {
     for (let key in frame) {
-      if (child.frame[key]) {
+      if (child.frame && child.frame[key]) {
         setStyle(element, key, child.frame[key]);
       } else {
         removeStyle(element, key);
@@ -166,10 +163,10 @@ function Transition(element, list, frame, dir) {
   this.list      = [this];
   this.timeout   = Transition.TIMEOUT;
 
-  if (isObject(frame)) {
-    this.supported = parsedProps(frame);
+  if (isObject(this.frame)) {
+    this.supported = parsedProps(this.frame);
     this.config = merge(
-      parsedTiming(frame),
+      parsedTiming(this.frame),
       parsedTransitions(this.supported)
     );
   }

@@ -22,5 +22,5 @@ export default function updateTransform(transform, prop, value) {
     }
     transform = transform + propValue(prop, value);
   }
-  return transform;
+  return transform.trim();
 }
