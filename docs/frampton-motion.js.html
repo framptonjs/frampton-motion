@@ -1,4 +1,32 @@
-(function() {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frampton-motion.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frampton-motion.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function() {
 /*globals Frampton:true */
 var define, require;
 var global = this;
@@ -16,7 +44,7 @@ var global = this;
 define('frampton-motion', ['exports', 'frampton/namespace', 'frampton-motion/transition', 'frampton-motion/sequence', 'frampton-motion/when'], function (exports, _framptonNamespace, _framptonMotionTransition, _framptonMotionSequence, _framptonMotionWhen) {
   'use strict';
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; }
 
   var _Frampton = _interopRequireDefault(_framptonNamespace);
 
@@ -38,7 +66,7 @@ define('frampton-motion', ['exports', 'frampton/namespace', 'frampton-motion/tra
 define('frampton-motion/animation_end', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
   'use strict';
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; }
 
   var _supported = _interopRequireDefault(_framptonStyleSupported);
 
@@ -92,7 +120,7 @@ define('frampton-motion/next_end', ['exports', 'module', 'frampton-utils/noop', 
 
   module.exports = next_end;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; }
 
   var _noop = _interopRequireDefault(_framptonUtilsNoop);
 
@@ -122,7 +150,7 @@ define('frampton-motion/normalized_frame', ['exports', 'module', 'frampton-utils
 
   module.exports = normalized_frame;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; }
 
   var _isNumber = _interopRequireDefault(_framptonUtilsIs_number);
 
@@ -148,9 +176,9 @@ define('frampton-motion/normalized_frame', ['exports', 'module', 'frampton-utils
         } else {
           obj[alias_mapping[key]] = frame[key];
         }
-      } else if (pixels(key) && _isNumber['default'](frame[key])) {
+      } else if (pixels(key) &amp;&amp; _isNumber['default'](frame[key])) {
         obj[key] = frame[key] + 'px';
-      } else if (durations(key) && _isNumber['default'](frame[key])) {
+      } else if (durations(key) &amp;&amp; _isNumber['default'](frame[key])) {
         obj[key] = frame[key] + 'ms';
       } else if (key === 'transition-timing-function') {
         obj[key] = _easing['default'][frame[key]] ? _easing['default'][frame[key]] : frame[key];
@@ -166,7 +194,7 @@ define('frampton-motion/parsed_props', ['exports', 'module', 'frampton-object/re
 
   module.exports = parsed_props;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; }
 
   var _reduceObj = _interopRequireDefault(_framptonObjectReduce);
 
@@ -190,7 +218,7 @@ define('frampton-motion/parsed_timing', ['exports', 'module', 'frampton-style/su
 
   module.exports = parsed_timing;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; }
 
   var _supported = _interopRequireDefault(_framptonStyleSupported);
 
@@ -214,7 +242,7 @@ define('frampton-motion/parsed_transitions', ['exports', 'module', 'frampton-sty
 
   module.exports = parsed_transitions;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; }
 
   var _supported = _interopRequireDefault(_framptonStyleSupported);
 
@@ -250,7 +278,7 @@ define("frampton-motion/sequence", ["exports", "module"], function (exports, mod
   module.exports = sequence_transitions;
 
   function sequence_transitions() {
-    for (var _len = arguments.length, transitions = Array(_len), _key = 0; _key < _len; _key++) {
+    for (var _len = arguments.length, transitions = Array(_len), _key = 0; _key &lt; _len; _key++) {
       transitions[_key] = arguments[_key];
     }
 
@@ -281,11 +309,11 @@ define('frampton-motion/transform_object', ['exports', 'module'], function (expo
 
   function transform_object(transform) {
     var obj = {};
-    for (var i = 0; i < transforms.length; i++) {
+    for (var i = 0; i &lt; transforms.length; i++) {
       var prop = transforms[i];
       var cap = new RegExp(prop + "\\(([^)]+)\\)");
       var matches = cap.exec(transform);
-      if (matches && matches.length) {
+      if (matches &amp;&amp; matches.length) {
         obj[prop] = matches[0].replace(prop + '(', '').replace(')', '');
       }
     }
@@ -297,7 +325,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 
   exports.__esModule = true;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; }
 
   var _assert = _interopRequireDefault(_framptonUtilsAssert);
 
@@ -418,11 +446,11 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
   }
 
   function findChild(child, element) {
-    if (child && child.element) {
+    if (child &amp;&amp; child.element) {
       return child;
     } else if (child) {
       if (child.name === Transition.WHEN) {
-        for (var i = 0; i < child.list.length; i++) {
+        for (var i = 0; i &lt; child.list.length; i++) {
           if (child.list[i].element === element) {
             return child.list[i];
           }
@@ -438,9 +466,9 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 
   function resolveStyles(element, frame, child) {
     child = findChild(child, element);
-    if (child && child.direction === Transition.DIR_OUT && child.element === element) {
+    if (child &amp;&amp; child.direction === Transition.DIR_OUT &amp;&amp; child.element === element) {
       for (var key in frame) {
-        if (child.frame && child.frame[key]) {
+        if (child.frame &amp;&amp; child.frame[key]) {
           _setStyle['default'](element, key, child.frame[key]);
         } else {
           _removeStyle['default'](element, key);
@@ -799,7 +827,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 define('frampton-motion/transition_end', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
   'use strict';
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; }
 
   var _supported = _interopRequireDefault(_framptonStyleSupported);
 
@@ -825,7 +853,7 @@ define('frampton-motion/update_transform', ['exports', 'module', 'frampton-utils
 
   module.exports = updateTransform;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; }
 
   var _isString = _interopRequireDefault(_framptonUtilsIs_string);
 
@@ -841,7 +869,7 @@ define('frampton-motion/update_transform', ['exports', 'module', 'frampton-utils
 
     if (_contains['default'](prop, transform)) {
       reg = new RegExp(prop + "\\([^)]*\\)");
-      if (_isString['default'](value) && value.trim() !== '') {
+      if (_isString['default'](value) &amp;&amp; value.trim() !== '') {
         transform = transform.replace(reg, propValue(prop, value));
       } else {
         transform = transform.replace(reg, '').replace('  ', ' ');
@@ -860,7 +888,7 @@ define('frampton-motion/when', ['exports', 'module', 'frampton-utils/noop', 'fra
 
   module.exports = when;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; }
 
   var _noop = _interopRequireDefault(_framptonUtilsNoop);
 
@@ -880,7 +908,7 @@ define('frampton-motion/when', ['exports', 'module', 'frampton-utils/noop', 'fra
    */
 
   function when() {
-    for (var _len = arguments.length, transitions = Array(_len), _key = 0; _key < _len; _key++) {
+    for (var _len = arguments.length, transitions = Array(_len), _key = 0; _key &lt; _len; _key++) {
       transitions[_key] = arguments[_key];
     }
 
@@ -906,7 +934,7 @@ define('frampton-motion/when', ['exports', 'module', 'frampton-utils/noop', 'fra
         }, child);
       };
 
-      for (var i = 0; i < len; i++) {
+      for (var i = 0; i &lt; len; i++) {
         _loop(i);
       }
     };
@@ -916,4 +944,26 @@ define('frampton-motion/when', ['exports', 'module', 'frampton-utils/noop', 'fra
 });
 require("frampton-motion");
 
-})();
+})();</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Frampton.Motion.html">Motion</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Thu Sep 03 2015 10:40:39 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

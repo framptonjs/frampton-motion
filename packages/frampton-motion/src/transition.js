@@ -147,6 +147,16 @@ function withFrame(transition, props) {
   );
 }
 
+/**
+ * @name Transition
+ * @class
+ * @private
+ * @memberof Frampton.Motion
+ * @param {Object} [element=null]        DomNode to transition
+ * @param {String} [list='']             Space-separated list of classes to add
+ * @param {Object} [frame={}]            Hash of props to add to element
+ * @param {String} [dir='transition-in'] Direction to run transition
+ */
 function Transition(element, list, frame, dir) {
 
   assert('Browser does not support CSS transitions', isSomething(transitionend));
@@ -178,18 +188,18 @@ function Transition(element, list, frame, dir) {
  * Start the transition. Optionally provide a callback for when transition is complete.
  *
  * @name run
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Function} resolve Function to call when transition is complete.
  */
 Transition.prototype.run = notImplemented;
 
 /**
  * @name delay
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} time Miliseconds to delay transition
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.delay = function Transition_delay(time) {
   return withFrame(this, {
@@ -199,10 +209,10 @@ Transition.prototype.delay = function Transition_delay(time) {
 
 /**
  * @name duration
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} time Miliseconds for transition to run
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.duration = function Transition_duration(time) {
   return withFrame(this, {
@@ -212,10 +222,10 @@ Transition.prototype.duration = function Transition_duration(time) {
 
 /**
  * @name width
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} width
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.width = function Transition_width(width) {
   return withFrame(this, {
@@ -225,10 +235,10 @@ Transition.prototype.width = function Transition_width(width) {
 
 /**
  * @name height
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} height
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.height = function Transition_width(height) {
   return withFrame(this, {
@@ -238,11 +248,11 @@ Transition.prototype.height = function Transition_width(height) {
 
 /**
  * @name dimensions
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} width
  * @param {Number} height
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.dimensions = function Transition_width(width, height) {
   return withFrame(this, {
@@ -253,10 +263,10 @@ Transition.prototype.dimensions = function Transition_width(width, height) {
 
 /**
  * @name top
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} position
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.top = function Transition_top(position) {
   return withFrame(this, {
@@ -266,10 +276,10 @@ Transition.prototype.top = function Transition_top(position) {
 
 /**
  * @name left
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} position
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.left = function Transition_left(position) {
   return withFrame(this, {
@@ -279,11 +289,11 @@ Transition.prototype.left = function Transition_left(position) {
 
 /**
  * @name position
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} left
  * @param {Number} top
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.position = function Transition_position(left, top) {
   return withFrame(this, {
@@ -294,10 +304,10 @@ Transition.prototype.position = function Transition_position(left, top) {
 
 /**
  * @name opacity
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} opacity
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.opacity = function Transition_opacity(opacity) {
   return withFrame(this, {
@@ -307,10 +317,10 @@ Transition.prototype.opacity = function Transition_opacity(opacity) {
 
 /**
  * @name translateX
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} distance
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.translateX = function Transition_translateX(distance) {
   return withFrame(this, {
@@ -324,10 +334,10 @@ Transition.prototype.translateX = function Transition_translateX(distance) {
 
 /**
  * @name translateY
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} distance
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.translateY = function Transition_translateY(distance) {
   return withFrame(this, {
@@ -341,10 +351,10 @@ Transition.prototype.translateY = function Transition_translateY(distance) {
 
 /**
  * @name translateZ
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} distance
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.translateZ = function Transition_translateZ(distance) {
   return withFrame(this, {
@@ -358,10 +368,10 @@ Transition.prototype.translateZ = function Transition_translateZ(distance) {
 
 /**
  * @name rotate
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} degrees
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.rotate = function Transition_translateZ(degrees) {
   return withFrame(this, {
@@ -375,10 +385,10 @@ Transition.prototype.rotate = function Transition_translateZ(degrees) {
 
 /**
  * @name scale
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {Number} scale
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.scale = function Transition_scale(scale) {
   return withFrame(this, {
@@ -392,10 +402,10 @@ Transition.prototype.scale = function Transition_scale(scale) {
 
 /**
  * @name addClass
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {String} name Name of class to add
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.addClass = function Transition_addClass(name) {
   return withDefaultRun(
@@ -408,10 +418,10 @@ Transition.prototype.addClass = function Transition_addClass(name) {
 
 /**
  * @name removeClass
- * @memberOf Frampton.Motion.Transition
- * @instance
+ * @method
+ * @memberof Frampton.Motion.Transition#
  * @param {String} name Name of class to remove
- * @returns {Transition}
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.removeClass = function Transition_removeClass(name) {
   return withDefaultRun(
@@ -424,9 +434,9 @@ Transition.prototype.removeClass = function Transition_removeClass(name) {
 
 /**
  * @name reverse
- * @memberOf Frampton.Motion.Transition
- * @instance
- * @returns {Transition}
+ * @method
+ * @memberof Frampton.Motion.Transition#
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.reverse = function Transition_reverse() {
   return withDefaultRun(
@@ -439,10 +449,10 @@ Transition.prototype.reverse = function Transition_reverse() {
 
 /**
  * @name reverse
- * @memberOf Frampton.Motion.Transition
- * @instance
- * @param {Transition} child Transition to run after this transition.
- * @returns {Transition}
+ * @method
+ * @memberof Frampton.Motion.Transition#
+ * @param {Frampton.Motion.Transition} child Transition to run after this transition.
+ * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.chain = function Transition_chain(child) {
 
@@ -482,6 +492,16 @@ Transition.CHAINED = 'chained';
 Transition.WHEN    = 'when';
 Transition.TIMEOUT = 3000;
 
+/**
+ * @name describe
+ * @method
+ * @memberof Frampton.Motion
+ * @param {Object}  element DomNode to transition
+ * @param {String}  name    Class name to add for transition, separate multiple classes with spaces ('class1 class2')
+ * @param {Object}  frame   Hash of CSS properties to add to element
+ * @param {Boolean} dir     Director to perform true is transition-in (add classes/props) false is transition-out (remove classes/props)
+ * @returns {Frampton.Motion.Transition}
+ */
 function describe(element, name, frame, dir) {
 
   if (isObject(name)) {
@@ -494,7 +514,7 @@ function describe(element, name, frame, dir) {
     element,
     (isString(name) ? name.split(' ') : null),
     (isObject(frame) ? frame : null),
-    (isString(dir) ? dir : Transition.DIR_IN)
+    ((dir === false) ? Transition.DIR_OUT : Transition.DIR_IN)
   );
 }
 

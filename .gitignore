@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
 dist/frampton-motion-tests.js
+docs/fonts
 notes.txt
 tmp

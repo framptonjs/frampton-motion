@@ -9,10 +9,10 @@ import { Transition } from 'frampton-motion/transition';
  * once all of its child Transitions have completed.
  *
  * @name when
- * @memberOf Frampton.Motion
- * @static
- * @param {Transition} transitions One or more transitions to run
- * @returns {Transition} A new Transition that runs the given tranisitions
+ * @method
+ * @memberof Frampton.Motion
+ * @param {...Frampton.Motion.Transition} transitions One or more transitions to run
+ * @returns {Frampton.Motion.Transition} A new Transition that runs the given tranisitions
  in parallel
  */
 export default function when(...transitions) {
