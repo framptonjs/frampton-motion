@@ -5,6 +5,16 @@ function propValue(prop, value) {
   return (prop + '(' + value + ')');
 }
 
+/**
+ * @name updateTransform
+ * @method
+ * @private
+ * @memberof Frampton.Motion
+ * @param {String} transform
+ * @param {String} prop
+ * @param {String|Number} value
+ * @returns {String}
+ */
 export default function updateTransform(transform, prop, value) {
   var reg;
   transform = (isString(transform) ? transform : '').trim();

@@ -3,7 +3,9 @@
   "version": "0.0.2",
   "description": "A module for frampton.js to manage CSS transitions in JavaScript",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "frampton test",
+    "build": "frampton build",
+    "docs": "rm -rfv docs/* && jsdoc dist/frampton-motion.js -d docs --readme README.md --private"
   },
   "author": "Kevin Greene <hightimesteddy@gmail.com>",
   "license": "MIT",

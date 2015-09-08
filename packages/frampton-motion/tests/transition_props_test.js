@@ -1,6 +1,6 @@
-import parsedTransitions from 'frampton-motion/parsed_transitions';
+import transitionProps from 'frampton-motion/transition_props';
 
-QUnit.module('Frampton.Motion.parsedTransitions');
+QUnit.module('Frampton.Motion.transitionProps');
 
 QUnit.test('should generate transition-property from hash', function() {
   var frame = {
@@ -9,7 +9,7 @@ QUnit.test('should generate transition-property from hash', function() {
     'opacity' : 0
   };
   deepEqual(
-    parsedTransitions(frame),
+    transitionProps(frame),
     {
       'transition-property' : 'height, width, opacity'
     }

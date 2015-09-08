@@ -19,12 +19,11 @@ import removeStyle from 'frampton-style/remove_style';
 import removeStyles from 'frampton-style/remove_styles';
 import addClass from 'frampton-style/add_class';
 import removeClass from 'frampton-style/remove_class';
-import { addListener } from 'frampton-events/event_dispatcher';
+import { listen } from 'frampton-events/listen';
 import sequence from 'frampton-motion/sequence';
 import transitionend from 'frampton-motion/transition_end';
 import reflow from 'frampton-motion/reflow';
-import setState from 'frampton-motion/set_state';
-import parsedTransitions from 'frampton-motion/parsed_transitions';
+import transitionProps from 'frampton-motion/transition_props';
 import parsedProps from 'frampton-motion/parsed_props';
 import parsedTiming from 'frampton-motion/parsed_timing';
 import updateTransform from 'frampton-motion/update_transform';
@@ -32,6 +31,23 @@ import normalizedFrame from 'frampton-motion/normalized_frame';
 
 function inverseDirection(dir) {
   return ((dir === Transition.DIR_IN) ? Transition.DIR_OUT : Transition.DIR_IN);
+}
+
+function resetState(transition) {
+  transition.element.classList.remove('transition-' + Transition.WAITING);
+  transition.element.classList.remove('transition-' + Transition.STARTED);
+  transition.element.classList.remove('transition-' + Transition.RUNNING);
+  transition.element.classList.remove('transition-' + Transition.CLEANUP);
+  transition.element.classList.remove('transition-' + Transition.DONE);
+}
+
+function setState(transition, state) {
+  if (transition.element) {
+    resetState(transition);
+    transition.element.classList.add('transition-' + state);
+    transition.element.setAttribute('data-transition-state', state);
+  }
+  transition.state = state;
 }
 
 function setDirection(transition, dir) {
@@ -42,7 +58,22 @@ function setDirection(transition, dir) {
   transition.direction = dir;
 }
 
+function once(transition, fn) {
+  listen(transitionend, transition.element).filter((evt) => {
+    return (parseInt(evt.target.getAttribute('data-transition-id')) === transition.id);
+  }).take(1).next(fn);
+}
+
 function defaultRun(resolve, child) {
+
+  var complete = () => {
+    setState(this, Transition.CLEANUP);
+    reflow(this.element);
+    setState(this, Transition.DONE);
+    immediate(() => {
+      (resolve || noop)(this.element);
+    });
+  };
 
   /**
    * Force a reflow of our element to make sure everything is prestine for us
@@ -54,17 +85,7 @@ function defaultRun(resolve, child) {
 
   this.element.setAttribute('data-transition-id', this.id);
 
-  var unsub = addListener(transitionend, (evt) => {
-    if (parseInt(evt.target.getAttribute('data-transition-id')) === this.id) {
-      unsub();
-      setState(this, Transition.CLEANUP);
-      reflow(this.element);
-      setState(this, Transition.DONE);
-      immediate(() => {
-        (resolve || noop)(this.element);
-      });
-    }
-  }, this.element);
+  once(this, complete);
 
   setDirection(this, this.direction);
 
@@ -83,9 +104,13 @@ function defaultRun(resolve, child) {
       resolveStyles(
         this.element,
         this.supported,
-        (isSomething(child) ? child : null)
+        findChild(child, this.element)
       );
     }
+  }
+
+  if (this.timeout > 0) {
+    setTimeout(complete, this.timeout);
   }
 
   setState(this, Transition.RUNNING);
@@ -111,7 +136,6 @@ function findChild(child, element) {
 }
 
 function resolveStyles(element, frame, child) {
-  child = findChild(child, element);
   if (child && child.direction === Transition.DIR_OUT && child.element === element) {
     for (let key in frame) {
       if (child.frame && child.frame[key]) {
@@ -177,7 +201,7 @@ function Transition(element, list, frame, dir) {
     this.supported = parsedProps(this.frame);
     this.config = merge(
       parsedTiming(this.frame),
-      parsedTransitions(this.supported)
+      transitionProps(this.supported)
     );
   }
 
