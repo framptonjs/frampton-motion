@@ -1,6 +1,6 @@
 {
   "name": "frampton-motion",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "A module for frampton.js to manage CSS transitions in JavaScript",
   "scripts": {
     "test": "frampton test",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framptonjs/frampton-motion.git"
+    "url": "git@github.com:framptonjs/frampton-motion.git"
   },
   "bugs": {
     "url": "https://github.com/framptonjs/frampton-motion/issues"

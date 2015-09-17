@@ -58,7 +58,17 @@ function setDirection(transition, dir) {
   transition.direction = dir;
 }
 
-function once(transition, fn) {
+function once(fn) {
+  var triggered = false;
+  return function(...args) {
+    if (!triggered) {
+      triggered = true;
+      return fn.apply(null, args);
+    }
+  };
+}
+
+function endOnce(transition, fn) {
   listen(transitionend, transition.element).filter((evt) => {
     return (parseInt(evt.target.getAttribute('data-transition-id')) === transition.id);
   }).take(1).next(fn);
@@ -66,14 +76,14 @@ function once(transition, fn) {
 
 function defaultRun(resolve, child) {
 
-  var complete = () => {
+  var complete = once(() => {
     setState(this, Transition.CLEANUP);
     reflow(this.element);
     setState(this, Transition.DONE);
     immediate(() => {
       (resolve || noop)(this.element);
     });
-  };
+  });
 
   /**
    * Force a reflow of our element to make sure everything is prestine for us
@@ -85,7 +95,7 @@ function defaultRun(resolve, child) {
 
   this.element.setAttribute('data-transition-id', this.id);
 
-  once(this, complete);
+  endOnce(this, complete);
 
   setDirection(this, this.direction);
 
@@ -107,10 +117,6 @@ function defaultRun(resolve, child) {
         findChild(child, this.element)
       );
     }
-  }
-
-  if (this.timeout > 0) {
-    setTimeout(complete, this.timeout);
   }
 
   setState(this, Transition.RUNNING);
@@ -195,7 +201,6 @@ function Transition(element, list, frame, dir) {
   this.classList = (isSomething(list) ? list : []).filter(not(isEmpty));
   this.state     = Transition.WAITING;
   this.list      = [this];
-  this.timeout   = Transition.TIMEOUT;
 
   if (isObject(this.frame)) {
     this.supported = parsedProps(this.frame);
@@ -514,7 +519,6 @@ Transition.DIR_OUT = 'transition-out';
 Transition.NORMAL  = 'normal';
 Transition.CHAINED = 'chained';
 Transition.WHEN    = 'when';
-Transition.TIMEOUT = 3000;
 
 /**
  * @name describe

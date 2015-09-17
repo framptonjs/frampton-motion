@@ -30,7 +30,7 @@ define('frampton-motion', ['exports', 'frampton/namespace', 'frampton-motion/tra
    * @memberof Frampton
    */
   _Frampton['default'].Motion = {};
-  _Frampton['default'].Motion.VERSION = '0.0.2';
+  _Frampton['default'].Motion.VERSION = '0.0.4';
   _Frampton['default'].Motion.describe = _framptonMotionTransition.describe;
   _Frampton['default'].Motion.sequence = _sequence['default'];
   _Frampton['default'].Motion.when = _when['default'];
@@ -396,7 +396,22 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
     transition.direction = dir;
   }
 
-  function once(transition, fn) {
+  function once(fn) {
+    var triggered = false;
+    return function () {
+      if (!triggered) {
+        triggered = true;
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        return fn.apply(null, args);
+      }
+    };
+  }
+
+  function endOnce(transition, fn) {
     _framptonEventsListen.listen(_transitionend['default'], transition.element).filter(function (evt) {
       return parseInt(evt.target.getAttribute('data-transition-id')) === transition.id;
     }).take(1).next(fn);
@@ -405,14 +420,14 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
   function defaultRun(resolve, child) {
     var _this = this;
 
-    var complete = function complete() {
+    var complete = once(function () {
       setState(_this, Transition.CLEANUP);
       _reflow['default'](_this.element);
       setState(_this, Transition.DONE);
       _immediate['default'](function () {
         (resolve || _noop['default'])(_this.element);
       });
-    };
+    });
 
     /**
      * Force a reflow of our element to make sure everything is prestine for us
@@ -424,7 +439,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 
     this.element.setAttribute('data-transition-id', this.id);
 
-    once(this, complete);
+    endOnce(this, complete);
 
     setDirection(this, this.direction);
 
@@ -442,10 +457,6 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
         _reflow['default'](this.element);
         resolveStyles(this.element, this.supported, findChild(child, this.element));
       }
-    }
-
-    if (this.timeout > 0) {
-      setTimeout(complete, this.timeout);
     }
 
     setState(this, Transition.RUNNING);
@@ -525,7 +536,6 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
     this.classList = (_isSomething['default'](list) ? list : []).filter(_not['default'](_isEmpty['default']));
     this.state = Transition.WAITING;
     this.list = [this];
-    this.timeout = Transition.TIMEOUT;
 
     if (_isObject['default'](this.frame)) {
       this.supported = _parsedProps['default'](this.frame);
@@ -803,7 +813,6 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
   Transition.NORMAL = 'normal';
   Transition.CHAINED = 'chained';
   Transition.WHEN = 'when';
-  Transition.TIMEOUT = 3000;
 
   /**
    * @name describe
