@@ -99,25 +99,27 @@ function defaultRun(resolve, child) {
 
   setDirection(this, this.direction);
 
-  if (this.direction === Transition.DIR_IN) {
-    this.classList.forEach(addClass(this.element));
-    if (isSomething(this.frame)) {
-      applyStyles(this.element, this.config);
-      reflow(this.element);
-      applyStyles(this.element, this.supported);
+  immediate(() => {
+    if (this.direction === Transition.DIR_IN) {
+      this.classList.forEach(addClass(this.element));
+      if (isSomething(this.frame)) {
+        applyStyles(this.element, this.config);
+        reflow(this.element);
+        applyStyles(this.element, this.supported);
+      }
+    } else {
+      this.classList.forEach(removeClass(this.element));
+      if (isSomething(this.frame)) {
+        applyStyles(this.element, this.config);
+        reflow(this.element);
+        resolveStyles(
+          this.element,
+          this.supported,
+          findChild(child, this.element)
+        );
+      }
     }
-  } else {
-    this.classList.forEach(removeClass(this.element));
-    if (isSomething(this.frame)) {
-      applyStyles(this.element, this.config);
-      reflow(this.element);
-      resolveStyles(
-        this.element,
-        this.supported,
-        findChild(child, this.element)
-      );
-    }
-  }
+  });
 
   setState(this, Transition.RUNNING);
 }

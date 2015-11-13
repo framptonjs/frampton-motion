@@ -13,16 +13,20 @@ var global = this;
   require = Frampton.__loader.require;
 
 }());
-define('frampton-motion', ['exports', 'frampton/namespace', 'frampton-motion/transition', 'frampton-motion/sequence', 'frampton-motion/when'], function (exports, _framptonNamespace, _framptonMotionTransition, _framptonMotionSequence, _framptonMotionWhen) {
+define('frampton-motion', ['exports', 'frampton/namespace', 'frampton-motion/prepare', 'frampton-motion/transition', 'frampton-motion/sequence', 'frampton-motion/when', 'frampton-motion/reflow'], function (exports, _framptonNamespace, _framptonMotionPrepare, _framptonMotionTransition, _framptonMotionSequence, _framptonMotionWhen, _framptonMotionReflow) {
   'use strict';
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
   var _Frampton = _interopRequireDefault(_framptonNamespace);
 
+  var _prepare = _interopRequireDefault(_framptonMotionPrepare);
+
   var _sequence = _interopRequireDefault(_framptonMotionSequence);
 
   var _when = _interopRequireDefault(_framptonMotionWhen);
+
+  var _reflow = _interopRequireDefault(_framptonMotionReflow);
 
   /**
    * @name Motion
@@ -30,9 +34,11 @@ define('frampton-motion', ['exports', 'frampton/namespace', 'frampton-motion/tra
    * @memberof Frampton
    */
   _Frampton['default'].Motion = {};
-  _Frampton['default'].Motion.VERSION = '0.0.4';
+  _Frampton['default'].Motion.VERSION = '0.0.8';
+  _Frampton['default'].Motion.prepare = _prepare['default'];
   _Frampton['default'].Motion.describe = _framptonMotionTransition.describe;
   _Frampton['default'].Motion.sequence = _sequence['default'];
+  _Frampton['default'].Motion.reflow = _reflow['default'];
   _Frampton['default'].Motion.when = _when['default'];
 });
 define('frampton-motion/animation_end', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
@@ -209,6 +215,33 @@ define('frampton-motion/parsed_timing', ['exports', 'module', 'frampton-style/su
     return timing;
   }
 });
+define('frampton-motion/prepare', ['exports', 'module', 'frampton-utils/is_object', 'frampton-style/add_class', 'frampton-style/apply_styles', 'frampton-motion/normalized_frame', 'frampton-motion/reflow'], function (exports, module, _framptonUtilsIs_object, _framptonStyleAdd_class, _framptonStyleApply_styles, _framptonMotionNormalized_frame, _framptonMotionReflow) {
+  'use strict';
+
+  module.exports = prepare;
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+  var _isObject = _interopRequireDefault(_framptonUtilsIs_object);
+
+  var _addClass = _interopRequireDefault(_framptonStyleAdd_class);
+
+  var _applyStyles = _interopRequireDefault(_framptonStyleApply_styles);
+
+  var _normalizedFrame = _interopRequireDefault(_framptonMotionNormalized_frame);
+
+  var _reflow = _interopRequireDefault(_framptonMotionReflow);
+
+  function prepare(element, classes, props) {
+    if (_isObject['default'](classes)) {
+      _applyStyles['default'](element, _normalizedFrame['default'](classes));
+    } else {
+      classes.split(' ').forEach(_addClass['default'](element));
+      _applyStyles['default'](element, _normalizedFrame['default'](props));
+    }
+    return (_reflow['default'](element), true);
+  }
+});
 define("frampton-motion/reflow", ["exports", "module"], function (exports, module) {
   /**
    * Forces browser reflow by reading the offsetHeight of given element
@@ -301,6 +334,50 @@ define('frampton-motion/transforms', ['exports', 'module'], function (exports, m
   'use strict';
 
   module.exports = ['matrix', 'matrix3d', 'translate', 'translate3d', 'translateX', 'translateY', 'translateZ', 'scale', 'scale3d', 'scaleX', 'scaleY', 'scaleZ', 'rotate', 'rotate3d', 'rotateX', 'rotateY', 'rotateZ', 'skew', 'skewX', 'skewY', 'perspective'];
+});
+define('frampton-motion/transition_end', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
+  'use strict';
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+  var _supported = _interopRequireDefault(_framptonStyleSupported);
+
+  var eventMap = {
+    'WebkitTransition': 'webkitTransitionEnd',
+    'MozTransition': 'transitionend',
+    'transition': 'transitionend'
+  };
+
+  function transitionEnd() {
+    return eventMap[_supported['default']('transition')] || null;
+  }
+
+  module.exports = transitionEnd();
+});
+define('frampton-motion/transition_props', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
+  'use strict';
+
+  module.exports = transition_props;
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+  var _supported = _interopRequireDefault(_framptonStyleSupported);
+
+  /**
+   * Returns an objec
+   * @name transitionProps
+   * @method
+   * @private
+   * @memberof Frampton.Motion
+   * @param {Object} props
+   * @returns {Object}
+   */
+
+  function transition_props(props) {
+    var trans = {};
+    trans[_supported['default']('transition-property')] = Object.keys(props).join(', ');
+    return trans;
+  }
 });
 define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'frampton-utils/immediate', 'frampton-utils/not', 'frampton-utils/is_empty', 'frampton-utils/is_something', 'frampton-utils/is_string', 'frampton-utils/is_object', 'frampton-utils/guid', 'frampton-utils/noop', 'frampton-utils/not_implemented', 'frampton-list/add', 'frampton-list/copy', 'frampton-list/remove', 'frampton-list/reverse', 'frampton-object/merge', 'frampton-style/set_style', 'frampton-style/apply_styles', 'frampton-style/remove_style', 'frampton-style/remove_styles', 'frampton-style/add_class', 'frampton-style/remove_class', 'frampton-events/listen', 'frampton-motion/sequence', 'frampton-motion/transition_end', 'frampton-motion/reflow', 'frampton-motion/transition_props', 'frampton-motion/parsed_props', 'frampton-motion/parsed_timing', 'frampton-motion/update_transform', 'frampton-motion/normalized_frame'], function (exports, _framptonUtilsAssert, _framptonUtilsImmediate, _framptonUtilsNot, _framptonUtilsIs_empty, _framptonUtilsIs_something, _framptonUtilsIs_string, _framptonUtilsIs_object, _framptonUtilsGuid, _framptonUtilsNoop, _framptonUtilsNot_implemented, _framptonListAdd, _framptonListCopy, _framptonListRemove, _framptonListReverse, _framptonObjectMerge, _framptonStyleSet_style, _framptonStyleApply_styles, _framptonStyleRemove_style, _framptonStyleRemove_styles, _framptonStyleAdd_class, _framptonStyleRemove_class, _framptonEventsListen, _framptonMotionSequence, _framptonMotionTransition_end, _framptonMotionReflow, _framptonMotionTransition_props, _framptonMotionParsed_props, _framptonMotionParsed_timing, _framptonMotionUpdate_transform, _framptonMotionNormalized_frame) {
   'use strict';
@@ -443,21 +520,23 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 
     setDirection(this, this.direction);
 
-    if (this.direction === Transition.DIR_IN) {
-      this.classList.forEach(_addClass['default'](this.element));
-      if (_isSomething['default'](this.frame)) {
-        _applyStyles['default'](this.element, this.config);
-        _reflow['default'](this.element);
-        _applyStyles['default'](this.element, this.supported);
+    _immediate['default'](function () {
+      if (_this.direction === Transition.DIR_IN) {
+        _this.classList.forEach(_addClass['default'](_this.element));
+        if (_isSomething['default'](_this.frame)) {
+          _applyStyles['default'](_this.element, _this.config);
+          _reflow['default'](_this.element);
+          _applyStyles['default'](_this.element, _this.supported);
+        }
+      } else {
+        _this.classList.forEach(_removeClass['default'](_this.element));
+        if (_isSomething['default'](_this.frame)) {
+          _applyStyles['default'](_this.element, _this.config);
+          _reflow['default'](_this.element);
+          resolveStyles(_this.element, _this.supported, findChild(child, _this.element));
+        }
       }
-    } else {
-      this.classList.forEach(_removeClass['default'](this.element));
-      if (_isSomething['default'](this.frame)) {
-        _applyStyles['default'](this.element, this.config);
-        _reflow['default'](this.element);
-        resolveStyles(this.element, this.supported, findChild(child, this.element));
-      }
-    }
+    });
 
     setState(this, Transition.RUNNING);
   }
@@ -837,50 +916,6 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 
   exports.Transition = Transition;
   exports.describe = describe;
-});
-define('frampton-motion/transition_end', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
-  'use strict';
-
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-  var _supported = _interopRequireDefault(_framptonStyleSupported);
-
-  var eventMap = {
-    'WebkitTransition': 'webkitTransitionEnd',
-    'MozTransition': 'transitionend',
-    'transition': 'transitionend'
-  };
-
-  function transitionEnd() {
-    return eventMap[_supported['default']('transition')] || null;
-  }
-
-  module.exports = transitionEnd();
-});
-define('frampton-motion/transition_props', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
-  'use strict';
-
-  module.exports = transition_props;
-
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-  var _supported = _interopRequireDefault(_framptonStyleSupported);
-
-  /**
-   * Returns an objec
-   * @name transitionProps
-   * @method
-   * @private
-   * @memberof Frampton.Motion
-   * @param {Object} props
-   * @returns {Object}
-   */
-
-  function transition_props(props) {
-    var trans = {};
-    trans[_supported['default']('transition-property')] = Object.keys(props).join(', ');
-    return trans;
-  }
 });
 define('frampton-motion/transitions', ['exports', 'module'], function (exports, module) {
   'use strict';
