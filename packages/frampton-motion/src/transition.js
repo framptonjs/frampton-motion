@@ -12,14 +12,14 @@ import add from 'frampton-list/add';
 import copyList from 'frampton-list/copy';
 import remove from 'frampton-list/remove';
 import reverse from 'frampton-list/reverse';
-import merge from 'frampton-object/merge';
+import merge from 'frampton-record/merge';
 import setStyle from 'frampton-style/set_style';
 import applyStyles from 'frampton-style/apply_styles';
 import removeStyle from 'frampton-style/remove_style';
 import removeStyles from 'frampton-style/remove_styles';
 import addClass from 'frampton-style/add_class';
 import removeClass from 'frampton-style/remove_class';
-import { listen } from 'frampton-events/listen';
+import onEvent from 'frampton-events/on_event';
 import sequence from 'frampton-motion/sequence';
 import transitionend from 'frampton-motion/transition_end';
 import reflow from 'frampton-motion/reflow';
@@ -69,7 +69,7 @@ function once(fn) {
 }
 
 function endOnce(transition, fn) {
-  listen(transitionend, transition.element).filter((evt) => {
+  onEvent(transitionend, transition.element).filter((evt) => {
     return (parseInt(evt.target.getAttribute('data-transition-id')) === transition.id);
   }).take(1).next(fn);
 }
@@ -487,8 +487,8 @@ Transition.prototype.reverse = function Transition_reverse() {
  */
 Transition.prototype.chain = function Transition_chain(child) {
 
-  var trans = new Transition();
-  var saved = this.run.bind(this);
+  const trans = new Transition();
+  const saved = this.run.bind(this);
 
   trans.name = Transition.CHAINED;
   trans.list = add(this.list, child);

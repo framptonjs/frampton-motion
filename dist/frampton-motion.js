@@ -34,7 +34,7 @@ define('frampton-motion', ['exports', 'frampton/namespace', 'frampton-motion/pre
    * @memberof Frampton
    */
   _Frampton['default'].Motion = {};
-  _Frampton['default'].Motion.VERSION = '0.0.8';
+  _Frampton['default'].Motion.VERSION = '0.0.9';
   _Frampton['default'].Motion.prepare = _prepare['default'];
   _Frampton['default'].Motion.describe = _framptonMotionTransition.describe;
   _Frampton['default'].Motion.sequence = _sequence['default'];
@@ -167,14 +167,14 @@ define('frampton-motion/normalized_frame', ['exports', 'module', 'frampton-utils
     return obj;
   }
 });
-define('frampton-motion/parsed_props', ['exports', 'module', 'frampton-object/reduce', 'frampton-list/contains', 'frampton-style/supported', 'frampton-motion/transitions'], function (exports, module, _framptonObjectReduce, _framptonListContains, _framptonStyleSupported, _framptonMotionTransitions) {
+define('frampton-motion/parsed_props', ['exports', 'module', 'frampton-record/reduce', 'frampton-list/contains', 'frampton-style/supported', 'frampton-motion/transitions'], function (exports, module, _framptonRecordReduce, _framptonListContains, _framptonStyleSupported, _framptonMotionTransitions) {
   'use strict';
 
   module.exports = parsed_props;
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-  var _reduceObj = _interopRequireDefault(_framptonObjectReduce);
+  var _reduceObj = _interopRequireDefault(_framptonRecordReduce);
 
   var _contains = _interopRequireDefault(_framptonListContains);
 
@@ -379,7 +379,7 @@ define('frampton-motion/transition_props', ['exports', 'module', 'frampton-style
     return trans;
   }
 });
-define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'frampton-utils/immediate', 'frampton-utils/not', 'frampton-utils/is_empty', 'frampton-utils/is_something', 'frampton-utils/is_string', 'frampton-utils/is_object', 'frampton-utils/guid', 'frampton-utils/noop', 'frampton-utils/not_implemented', 'frampton-list/add', 'frampton-list/copy', 'frampton-list/remove', 'frampton-list/reverse', 'frampton-object/merge', 'frampton-style/set_style', 'frampton-style/apply_styles', 'frampton-style/remove_style', 'frampton-style/remove_styles', 'frampton-style/add_class', 'frampton-style/remove_class', 'frampton-events/listen', 'frampton-motion/sequence', 'frampton-motion/transition_end', 'frampton-motion/reflow', 'frampton-motion/transition_props', 'frampton-motion/parsed_props', 'frampton-motion/parsed_timing', 'frampton-motion/update_transform', 'frampton-motion/normalized_frame'], function (exports, _framptonUtilsAssert, _framptonUtilsImmediate, _framptonUtilsNot, _framptonUtilsIs_empty, _framptonUtilsIs_something, _framptonUtilsIs_string, _framptonUtilsIs_object, _framptonUtilsGuid, _framptonUtilsNoop, _framptonUtilsNot_implemented, _framptonListAdd, _framptonListCopy, _framptonListRemove, _framptonListReverse, _framptonObjectMerge, _framptonStyleSet_style, _framptonStyleApply_styles, _framptonStyleRemove_style, _framptonStyleRemove_styles, _framptonStyleAdd_class, _framptonStyleRemove_class, _framptonEventsListen, _framptonMotionSequence, _framptonMotionTransition_end, _framptonMotionReflow, _framptonMotionTransition_props, _framptonMotionParsed_props, _framptonMotionParsed_timing, _framptonMotionUpdate_transform, _framptonMotionNormalized_frame) {
+define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'frampton-utils/immediate', 'frampton-utils/not', 'frampton-utils/is_empty', 'frampton-utils/is_something', 'frampton-utils/is_string', 'frampton-utils/is_object', 'frampton-utils/guid', 'frampton-utils/noop', 'frampton-utils/not_implemented', 'frampton-list/add', 'frampton-list/copy', 'frampton-list/remove', 'frampton-list/reverse', 'frampton-record/merge', 'frampton-style/set_style', 'frampton-style/apply_styles', 'frampton-style/remove_style', 'frampton-style/remove_styles', 'frampton-style/add_class', 'frampton-style/remove_class', 'frampton-events/on_event', 'frampton-motion/sequence', 'frampton-motion/transition_end', 'frampton-motion/reflow', 'frampton-motion/transition_props', 'frampton-motion/parsed_props', 'frampton-motion/parsed_timing', 'frampton-motion/update_transform', 'frampton-motion/normalized_frame'], function (exports, _framptonUtilsAssert, _framptonUtilsImmediate, _framptonUtilsNot, _framptonUtilsIs_empty, _framptonUtilsIs_something, _framptonUtilsIs_string, _framptonUtilsIs_object, _framptonUtilsGuid, _framptonUtilsNoop, _framptonUtilsNot_implemented, _framptonListAdd, _framptonListCopy, _framptonListRemove, _framptonListReverse, _framptonRecordMerge, _framptonStyleSet_style, _framptonStyleApply_styles, _framptonStyleRemove_style, _framptonStyleRemove_styles, _framptonStyleAdd_class, _framptonStyleRemove_class, _framptonEventsOn_event, _framptonMotionSequence, _framptonMotionTransition_end, _framptonMotionReflow, _framptonMotionTransition_props, _framptonMotionParsed_props, _framptonMotionParsed_timing, _framptonMotionUpdate_transform, _framptonMotionNormalized_frame) {
   'use strict';
 
   exports.__esModule = true;
@@ -414,7 +414,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 
   var _reverse = _interopRequireDefault(_framptonListReverse);
 
-  var _merge = _interopRequireDefault(_framptonObjectMerge);
+  var _merge = _interopRequireDefault(_framptonRecordMerge);
 
   var _setStyle = _interopRequireDefault(_framptonStyleSet_style);
 
@@ -427,6 +427,8 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
   var _addClass = _interopRequireDefault(_framptonStyleAdd_class);
 
   var _removeClass = _interopRequireDefault(_framptonStyleRemove_class);
+
+  var _onEvent = _interopRequireDefault(_framptonEventsOn_event);
 
   var _sequence = _interopRequireDefault(_framptonMotionSequence);
 
@@ -489,7 +491,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
   }
 
   function endOnce(transition, fn) {
-    _framptonEventsListen.listen(_transitionend['default'], transition.element).filter(function (evt) {
+    _onEvent['default'](_transitionend['default'], transition.element).filter(function (evt) {
       return parseInt(evt.target.getAttribute('data-transition-id')) === transition.id;
     }).take(1).next(fn);
   }
