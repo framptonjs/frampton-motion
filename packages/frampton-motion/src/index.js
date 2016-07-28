@@ -11,7 +11,7 @@ import reflow from 'frampton-motion/reflow';
  * @memberof Frampton
  */
 Frampton.Motion          = {};
-Frampton.Motion.VERSION  = '0.0.9';
+Frampton.Motion.VERSION  = '0.0.10';
 Frampton.Motion.prepare  = prepare;
 Frampton.Motion.describe = describe;
 Frampton.Motion.sequence = sequence;
