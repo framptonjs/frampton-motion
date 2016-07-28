@@ -17,7 +17,7 @@ import { Transition } from 'frampton-motion/transition';
  */
 export default function when(...transitions) {
 
-  var transition = new Transition();
+  const transition = new Transition();
   transition.name = Transition.WHEN;
   transition.list = transitions;
 
@@ -29,14 +29,18 @@ export default function when(...transitions) {
 
   transition.run = function when_run(resolve, child) {
 
-    var len = transitions.length;
+    var count = 0;
+    const len = transitions.length;
+
+    function handleComplete() {
+      count += 1;
+      if (count === (len - 1)) {
+        (resolve || noop)();
+      }
+    }
 
     for (let i=0;i<len;i++) {
-      transitions[i].run(() => {
-        if (i === (len - 1)) {
-          (resolve || noop)();
-        }
-      }, child);
+      transitions[i].run(handleComplete, child);
     }
   };
 

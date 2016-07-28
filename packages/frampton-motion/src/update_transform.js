@@ -16,11 +16,11 @@ function propValue(prop, value) {
  * @returns {String}
  */
 export default function updateTransform(transform, prop, value) {
-  var reg;
+
   transform = (isString(transform) ? transform : '').trim();
 
   if (contains(prop, transform)) {
-    reg = new RegExp(prop + "\\([^)]*\\)");
+    const reg = new RegExp(prop + "\\([^)]*\\)");
     if (isString(value) && value.trim() !== '') {
       transform = transform.replace(reg, propValue(prop, value));
     } else {
@@ -32,5 +32,6 @@ export default function updateTransform(transform, prop, value) {
     }
     transform = transform + propValue(prop, value);
   }
+
   return transform.trim();
 }

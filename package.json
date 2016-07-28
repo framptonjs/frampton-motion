@@ -1,6 +1,6 @@
 {
   "name": "frampton-motion",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A module for frampton.js to manage CSS transitions in JavaScript",
   "scripts": {
     "test": "frampton test",
@@ -18,9 +18,7 @@
   },
   "homepage": "https://github.com/framptonjs/frampton-motion",
   "devDependencies": {
-    "broccoli": "^0.16.2",
-    "broccoli-cli": "^1.0.0",
-    "frampton-build": "*",
-    "qunitjs": "^1.16.0"
+    "frampton-build": "0.0.5",
+    "frampton-cli": "0.0.4"
   }
 }

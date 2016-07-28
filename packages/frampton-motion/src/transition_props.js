@@ -10,7 +10,7 @@ import supported from 'frampton-style/supported';
  * @returns {Object}
  */
 export default function transition_props(props) {
-  var trans = {};
+  const trans = {};
   trans[supported('transition-property')] = Object.keys(props).join(', ');
   return trans;
 }

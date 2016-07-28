@@ -1,6 +1,6 @@
 import supported from 'frampton-style/supported';
 
-var eventMap = {
+const eventMap = {
   'WebkitTransition' : 'webkitTransitionEnd',
   'MozTransition' : 'transitionend',
   'transition' : 'transitionend'
