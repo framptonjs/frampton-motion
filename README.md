@@ -4,7 +4,14 @@ Managing CSS transitions and animations in JavaScript are a perfect opportunity 
 
 This module will add objects and functions to Frampton to manage CSS transitions in a declarative manner.
 
-Just include this file after Frampton.
+### Install
+
+```
+npm install --save frampton
+npm install --save frampton-motion
+```
+
+### Include
 
 ```
 <script src="frampton.js"></script>
@@ -16,18 +23,86 @@ Just include this file after Frampton.
 Currently Motion exposes three public methods: describe, when and sequence.
 
 ```
-var describe = Frampton.Motion.describe;
+const describe = Frampton.Motion.describe;
 
-var element = document.getElementById('some-id');
+const element = document.getElementById('some-id');
 
-// Transitions can be created with a class name to add to cause the transition.
-var myTransition = describe(element, 'my-class');
-
-// Transitions can also be created with a hash of properties to apply to the element.
-var otherTransition = describe(element, {
+// The description of a transition is an object. This object can take a few
+// different forms. First, it can be a set of properties to transition to.
+// Here 'duration' is short-hand for 'transition-duration'. The same works
+// with 'delay'. You can use 'delay' or 'transition-delay'.
+const myTransition = describe(element, {
   opacity : 0,
   transform : 'scale(0.6)',
   duration : '500ms'
+});
+
+// If you need to reset the properties of an element before starting the
+// transition you can use a 'from' block. Often this is useful in situations
+// where you have width or height set to 'auto', but need an actual value
+// to transition from.
+const myTransition = describe(element, {
+  from : {
+    height : element.offsetHeight,
+    opacity : 1,
+    transform : 'scale(1.6)'
+  },
+  to : {
+    opacity : 0,
+    transform : 'scale(0.6)',
+    duration : '500ms'
+  }
+});
+
+// If you are using classes to apply your transition, use the class parameter
+// and supply a space-separated list of classes to add.
+const myTransition = describe(element, {
+  class : 'apply theses classes'
+});
+
+// If you wish to remove and/or add classes, supply arrays to the add and/or
+// remove properties
+const myTransition = describe(element, {
+  class : {
+    add : ['add', 'these'],
+    remove : ['remove', 'this']
+  }
+});
+
+// You can also use from/to blocks with classes
+const myTransition = describe(element, {
+  from : {
+    class : {
+      remove : ['test-remove']
+    }
+  },
+  to : {
+    class : {
+      add : ['test-add']
+    }
+  }
+});
+
+// Finally, you can combine classes and styles
+const myTransition = describe(element, {
+  from : {
+    class : {
+      remove : ['test-remove']
+    },
+    style : {
+      height : '100px'
+    }
+  },
+  to : {
+    class : {
+      add : ['test-add']
+    },
+    style : {
+      height : '0px',
+      opacity : 0,
+      duration : 100
+    }
+  }
 });
 ```
 
@@ -36,10 +111,10 @@ The describe function will automatically apply any vendor prefixes required by t
 All methods on the Transition object, other than the run method, return a new Transition.
 
 ```
-var hide = describe(element, { opacity : 0 });
-var show = hide.reverse();
+const hide = describe(element, { opacity : 0 });
+const show = hide.reverse();
 
-var hideThenShow = hide.chain(show);
+const hideThenShow = hide.chain(show);
 
 hideThenShow.run(function() {
   // hide is unchanged. we can use it here
@@ -50,18 +125,15 @@ hideThenShow.run(function() {
 The other two methods exported by motion are sequence and when. Sequence runs Transitions in sequence, returning a new Transition that completes when all of it's child Transitions complete. When is similar, but it runs all Transitions in parallel.
 
 ```
-var showModal = when(fadeInMask, fadeInDialog);
-var hideModal = showModal.reverse();
+const when = Frampton.Motion.when;
+const sequence = Frampton.Motion.sequence;
+
+const showModal = when(fadeInMask, fadeInDialog);
+const hideModal = showModal.reverse();
+
+const showThenHide = sequence(showModal, hideModal);
 ```
 
 ### Be Aware
 
 If you chain two transitions together that don't change anything, or do the same thing, there will be nothing for one or both of them to transition, no transition means no transitionend event means the chain is broken.
-
-#### A Known Issue
-
-##### Woo hoo! This is fixed (more or less) v0.0.2
-
-Where this will most likely come into play is with reverse. When you reverse a Transition you just undo the Transition you called it on. If a Transition adds a class, reversing it removes the class. The same for css properties, the reverse of adding a property is removing it. So if I chain two Transitions that update the same property then reverse that chained Transition, the first Transition will remove the property and the second Transition will have nothing to do.
-
-I plan to update this so that Transitions are more context aware when part of a composition. Just haven't gotten there yet.

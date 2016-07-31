@@ -6,6 +6,9 @@ function propValue(prop, value) {
 }
 
 /**
+ *
+ *
+ *
  * @name updateTransform
  * @method
  * @private
@@ -17,7 +20,8 @@ function propValue(prop, value) {
  */
 export default function updateTransform(transform, prop, value) {
 
-  transform = (isString(transform) ? transform : '').trim();
+  transform =
+    (isString(transform) ? transform : '').trim();
 
   if (contains(prop, transform)) {
     const reg = new RegExp(prop + "\\([^)]*\\)");

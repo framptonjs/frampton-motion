@@ -1,6 +1,6 @@
-import normalizedFrame from 'frampton-motion/normalized_frame';
+import normalizedFrame from 'frampton-motion/utils/normalized_frame';
 
-QUnit.module('Frampton.Motion.normalizedFrame');
+QUnit.module('Frampton.Motion.Utils.normalizedFrame');
 
 QUnit.test('should return object with props correctly formatted', function(assert) {
   const frame = {

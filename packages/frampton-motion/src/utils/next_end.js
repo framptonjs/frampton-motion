@@ -1,6 +1,6 @@
 import noop from 'frampton-utils/noop';
 import once from 'frampton-events/once';
-import transitionend from 'frampton-motion/transition_end';
+import transitionend from 'frampton-motion/utils/transition_end';
 
 /**
  * Call the given function the next time the element recieves a transitionend

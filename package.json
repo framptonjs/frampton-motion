@@ -1,6 +1,6 @@
 {
   "name": "frampton-motion",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "A module for frampton.js to manage CSS transitions in JavaScript",
   "scripts": {
     "test": "frampton test",
@@ -10,7 +10,7 @@
     "docs": "rm -rfv docs/* && jsdoc dist/frampton-motion.js -d docs --readme README.md --private"
   },
   "author": "Kevin Greene <hightimesteddy@gmail.com>",
-  "license": "MIT",
+  "license": "BSD",
   "repository": {
     "type": "git",
     "url": "git@github.com:framptonjs/frampton-motion.git"
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/framptonjs/frampton-motion",
   "devDependencies": {
-    "frampton": "0.1.8",
+    "frampton": "0.1.9",
     "frampton-build": "0.0.6",
     "frampton-cli": "0.0.6",
     "jsdoc": "3.4.0"

@@ -2,7 +2,7 @@ import supported from 'frampton-style/supported';
 
 export default function parsed_timing(props) {
 
-  var timing = {};
+  const timing = {};
 
   if (props['transition-delay']) {
     timing[supported('transition-delay')] = props['transition-delay'];

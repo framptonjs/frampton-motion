@@ -1,179 +1,45 @@
-import assert from 'frampton-utils/assert';
-import immediate from 'frampton-utils/immediate';
-import not from 'frampton-utils/not';
-import isEmpty from 'frampton-utils/is_empty';
 import isSomething from 'frampton-utils/is_something';
 import isString from 'frampton-utils/is_string';
-import isObject from 'frampton-utils/is_object';
 import guid from 'frampton-utils/guid';
-import noop from 'frampton-utils/noop';
 import notImplemented from 'frampton-utils/not_implemented';
-import add from 'frampton-list/add';
-import copyList from 'frampton-list/copy';
-import remove from 'frampton-list/remove';
+import addToList from 'frampton-list/add';
+import removeFromList from 'frampton-list/remove';
 import reverse from 'frampton-list/reverse';
 import merge from 'frampton-record/merge';
-import setStyle from 'frampton-style/set_style';
-import applyStyles from 'frampton-style/apply_styles';
-import removeStyle from 'frampton-style/remove_style';
-import removeStyles from 'frampton-style/remove_styles';
-import addClass from 'frampton-style/add_class';
-import removeClass from 'frampton-style/remove_class';
-import onEvent from 'frampton-events/on_event';
 import sequence from 'frampton-motion/sequence';
-import transitionend from 'frampton-motion/transition_end';
-import reflow from 'frampton-motion/reflow';
-import transitionProps from 'frampton-motion/transition_props';
-import parsedProps from 'frampton-motion/parsed_props';
-import parsedTiming from 'frampton-motion/parsed_timing';
-import updateTransform from 'frampton-motion/update_transform';
-import normalizedFrame from 'frampton-motion/normalized_frame';
+import setState from 'frampton-motion/utils/set_state';
+import inverseDirection from 'frampton-motion/utils/inverse_direction';
+import defaultRun from 'frampton-motion/utils/default_run';
+import transitionProps from 'frampton-motion/utils/transition_props';
+import parsedProps from 'frampton-motion/utils/parsed_props';
+import parsedTiming from 'frampton-motion/utils/parsed_timing';
+import updateTransform from 'frampton-motion/utils/update_transform';
+import validatedTransition from 'frampton-motion/utils/validated_transition';
 
-function inverseDirection(dir) {
-  return ((dir === Transition.DIR_IN) ? Transition.DIR_OUT : Transition.DIR_IN);
-}
+import {
+  DIRECTION,
+  STATE,
+  TYPE
+} from 'frampton-motion/data/constants';
 
-function resetState(transition) {
-  transition.element.classList.remove('transition-' + Transition.WAITING);
-  transition.element.classList.remove('transition-' + Transition.STARTED);
-  transition.element.classList.remove('transition-' + Transition.RUNNING);
-  transition.element.classList.remove('transition-' + Transition.CLEANUP);
-  transition.element.classList.remove('transition-' + Transition.DONE);
-}
-
-function setState(transition, state) {
-  if (transition.element) {
-    resetState(transition);
-    transition.element.classList.add('transition-' + state);
-    transition.element.setAttribute('data-transition-state', state);
-  }
-  transition.state = state;
-}
-
-function setDirection(transition, dir) {
-  if (transition.element) {
-    transition.element.classList.remove(inverseDirection(dir));
-    transition.element.classList.add(dir);
-  }
-  transition.direction = dir;
-}
-
-function once(fn) {
-  var triggered = false;
-  return function(...args) {
-    if (!triggered) {
-      triggered = true;
-      return fn.apply(null, args);
-    }
-  };
-}
-
-function endOnce(transition, fn) {
-  onEvent(transitionend, transition.element).filter((evt) => {
-    return (evt.target.getAttribute('data-transition-id') === transition.id);
-  }).take(1).next(fn);
-}
-
-function defaultRun(resolve, child) {
-
-  const complete = once(() => {
-    setState(this, Transition.CLEANUP);
-    reflow(this.element);
-    setState(this, Transition.DONE);
-    immediate(() => {
-      (resolve || noop)(this.element);
-    });
-  });
-
-  /**
-   * Force a reflow of our element to make sure everything is prestine for us
-   * to start fuckin' things up. Without doing this, some browsers will not have
-   * the correct current state of our element in which to start the transition
-   * from.
-   */
-  reflow(this.element);
-
-  this.element.setAttribute('data-transition-id', this.id);
-
-  endOnce(this, complete);
-
-  setDirection(this, this.direction);
-
-  immediate(() => {
-    if (this.direction === Transition.DIR_IN) {
-      this.classList.forEach(addClass(this.element));
-      if (isSomething(this.frame)) {
-        applyStyles(this.element, this.config);
-        reflow(this.element);
-        applyStyles(this.element, this.supported);
-      }
-    } else {
-      this.classList.forEach(removeClass(this.element));
-      if (isSomething(this.frame)) {
-        applyStyles(this.element, this.config);
-        reflow(this.element);
-        resolveStyles(
-          this.element,
-          this.supported,
-          findChild(child, this.element)
-        );
-      }
-    }
-  });
-
-  setState(this, Transition.RUNNING);
-}
-
-function findChild(child, element) {
-  if (child && child.element) {
-    return child;
-  } else if (child) {
-    if (child.name === Transition.WHEN) {
-      for (let i=0;i<child.list.length;i++) {
-        if (child.list[i].element === element) {
-          return child.list[i];
-        }
-      }
-    } else if (child.name === Transition.CHAINED) {
-      if (child.list[0].element === element) {
-        return child.list[0];
-      }
-    }
-  }
-  return null;
-}
-
-function resolveStyles(element, frame, child) {
-  if (child && child.direction === Transition.DIR_OUT && child.element === element) {
-    for (let key in frame) {
-      if (child.frame && child.frame[key]) {
-        setStyle(element, key, child.frame[key]);
-      } else {
-        removeStyle(element, key);
-      }
-    }
-  } else {
-    removeStyles(element, frame);
-  }
-}
-
-function withDefaultRun(element, list, frame, dir) {
-  var trans = new Transition(element, list, frame, dir);
+function withDefaultRun(element, frame, dir) {
+  const trans = new Transition(element, frame, dir);
   trans.run = defaultRun;
   return trans;
 }
 
 function withFrame(transition, props) {
 
-  var frame = (isSomething(transition.frame) ? transition.frame : {});
+  // Makes a copy of the frame
+  const frame = validatedTransition(transition.frame);
 
+  // Add new props to the copy
   for (let key in props) {
-    frame[key] = props[key];
+    frame.to.style[key] = props[key];
   }
 
   return withDefaultRun(
     transition.element,
-    copyList(transition.classList),
     frame,
     transition.direction
   );
@@ -185,32 +51,23 @@ function withFrame(transition, props) {
  * @private
  * @memberof Frampton.Motion
  * @param {Object} [element=null]        DomNode to transition
- * @param {String} [list='']             Space-separated list of classes to add
  * @param {Object} [frame={}]            Hash of props to add to element
  * @param {String} [dir='transition-in'] Direction to run transition
  */
-function Transition(element, list, frame, dir) {
+function Transition(element, frame, dir) {
 
-  assert('Browser does not support CSS transitions', isSomething(transitionend));
-
-  this.id        = guid();
-  this.name      = Transition.NORMAL;
-  this.element   = (isSomething(element) ? element : null);
-  this.direction = (isSomething(dir) ? dir : Transition.DIR_IN);
-  this.frame     = (isSomething(frame) ? normalizedFrame(frame) : null);
-  this.config    = null;
-  this.supported = null;
-  this.classList = (isSomething(list) ? list : []).filter(not(isEmpty));
-  this.state     = Transition.WAITING;
-  this.list      = [this];
-
-  if (isObject(this.frame)) {
-    this.supported = parsedProps(this.frame);
-    this.config = merge(
-      parsedTiming(this.frame),
-      transitionProps(this.supported)
-    );
-  }
+  this.id = guid();
+  this.list = [this];
+  this.name = TYPE.NORMAL;
+  this.element = (isSomething(element) ? element : null);
+  this.direction = (isSomething(dir) ? dir : DIRECTION.DIR_IN);
+  this.frame = validatedTransition(frame);
+  this.state = STATE.WAITING;
+  this.supported = parsedProps(this.frame.to.style);
+  this.config = merge(
+    parsedTiming(this.frame.to.style),
+    transitionProps(this.supported)
+  );
 
   setState(this, this.state);
 }
@@ -439,10 +296,13 @@ Transition.prototype.scale = function Transition_scale(scale) {
  * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.addClass = function Transition_addClass(name) {
+
+  const newFrame = validatedTransition(this.frame);
+  newFrame.to.class.add = addToList(newFrame.to.class.add, name);
+
   return withDefaultRun(
     this.element,
-    add(this.classList, name),
-    (isSomething(this.frame) ? this.frame : null),
+    newFrame,
     this.direction
   );
 };
@@ -455,10 +315,13 @@ Transition.prototype.addClass = function Transition_addClass(name) {
  * @returns {Frampton.Motion.Transition}
  */
 Transition.prototype.removeClass = function Transition_removeClass(name) {
+
+  const newFrame = validatedTransition(this.frame);
+  newFrame.to.class.add = removeFromList(newFrame.to.class.add, name);
+
   return withDefaultRun(
     this.element,
-    remove(this.classList, name),
-    (isSomething(this.frame) ? this.frame : null),
+    newFrame,
     this.direction
   );
 };
@@ -472,8 +335,7 @@ Transition.prototype.removeClass = function Transition_removeClass(name) {
 Transition.prototype.reverse = function Transition_reverse() {
   return withDefaultRun(
     this.element,
-    copyList(this.classList),
-    (isSomething(this.frame) ? this.frame : null),
+    this.frame,
     inverseDirection(this.direction)
   );
 };
@@ -491,7 +353,7 @@ Transition.prototype.chain = function Transition_chain(child) {
   const saved = this.run.bind(this);
 
   trans.name = Transition.CHAINED;
-  trans.list = add(this.list, child);
+  trans.list = addToList(this.list, child);
 
   trans.run = function chain_run(resolve, next) {
     saved(() => {
@@ -511,41 +373,36 @@ Transition.prototype.chain = function Transition_chain(child) {
   return trans;
 };
 
-Transition.WAITING = 'waiting';
-Transition.STARTED = 'started';
-Transition.RUNNING = 'running';
-Transition.DONE    = 'done';
-Transition.CLEANUP = 'cleanup';
-Transition.DIR_IN  = 'transition-in';
-Transition.DIR_OUT = 'transition-out';
-Transition.NORMAL  = 'normal';
-Transition.CHAINED = 'chained';
-Transition.WHEN    = 'when';
-
 /**
+ *
+ * {
+ *   from : {
+ *     class : {
+ *       add : [],
+ *       remove : []
+ *     },
+ *     style : {}
+ *   },
+ *   to : {
+ *     class : {
+ *       add : [],
+ *       remove : []
+ *     },
+ *     style : {}
+ *   }
+ * }
+ *
  * @name describe
  * @method
  * @memberof Frampton.Motion
  * @param {Object}  element DomNode to transition
- * @param {String}  name    Class name to add for transition, separate multiple classes with spaces ('class1 class2')
  * @param {Object}  frame   Hash of CSS properties to add to element
  * @param {Boolean} dir     Director to perform true is transition-in (add classes/props) false is transition-out (remove classes/props)
  * @returns {Frampton.Motion.Transition}
  */
-function describe(element, name, frame, dir) {
-
-  if (isObject(name)) {
-    dir = frame;
-    frame = name;
-    name = null;
-  }
-
-  return withDefaultRun(
-    element,
-    (isString(name) ? name.split(' ') : null),
-    (isObject(frame) ? frame : null),
-    ((dir === false) ? Transition.DIR_OUT : Transition.DIR_IN)
-  );
+function describe(element, transition, dir) {
+  const direction = ((dir === false) ? DIRECTION.DIR_OUT : DIRECTION.DIR_IN);
+  return withDefaultRun( element, transition, direction );
 }
 
 export {

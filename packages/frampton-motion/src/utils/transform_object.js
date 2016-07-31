@@ -1,4 +1,4 @@
-import transforms from 'frampton-motion/transforms';
+import transforms from 'frampton-motion/data/transforms';
 
 /**
  * Give a string representing a CSS transform it returns an object representation
@@ -23,11 +23,12 @@ import transforms from 'frampton-motion/transforms';
  * @returns {Object}
  */
 export default function transform_object(transform) {
-  var obj = {};
-  for (let i=0;i<transforms.length;i++) {
-    let prop = transforms[i];
-    let cap = new RegExp(prop + "\\(([^)]+)\\)");
-    let matches = cap.exec(transform);
+  const obj = {};
+  const len = transforms.length;
+  for (let i=0; i<len; i++) {
+    const prop = transforms[i];
+    const cap = new RegExp(prop + "\\(([^)]+)\\)");
+    const matches = cap.exec(transform);
     if (matches && matches.length) {
       obj[prop] = matches[0].replace(prop + '(', '').replace(')', '');
     }

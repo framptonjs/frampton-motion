@@ -1,6 +1,6 @@
-import updateTransform from 'frampton-motion/update_transform';
+import updateTransform from 'frampton-motion/utils/update_transform';
 
-QUnit.module('Frampton.Motion.updateTransform');
+QUnit.module('Frampton.Motion.Utils.updateTransform');
 
 QUnit.test('should correctly change first value', function(assert) {
   const transform = 'translateX(100px) rotate(180deg) scale(1.5)';

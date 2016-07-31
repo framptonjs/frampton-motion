@@ -1,6 +1,6 @@
-import transformObject from 'frampton-motion/transform_object';
+import transformObject from 'frampton-motion/utils/transform_object';
 
-QUnit.module('Frampton.Motion.transformObject');
+QUnit.module('Frampton.Motion.Utils.transformObject');
 
 QUnit.test('should return an object representing values in string', function(assert) {
   const transform = 'translateX(100px) rotate(180deg) scale(1.5)';

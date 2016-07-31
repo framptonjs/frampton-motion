@@ -1,7 +1,17 @@
 import supported from 'frampton-style/supported';
 
 /**
- * Returns an objec
+ * Returns an object of properties to animate in this transition
+ *
+ * {
+ *    height : 0px,
+ *    opacity : 0
+ * }
+ *
+ * {
+ *    transition-property : 'height, opacity'
+ * }
+ *
  * @name transitionProps
  * @method
  * @private

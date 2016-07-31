@@ -34,12 +34,12 @@ export default function when(...transitions) {
 
     function handleComplete() {
       count += 1;
-      if (count === (len - 1)) {
+      if (count === len) {
         (resolve || noop)();
       }
     }
 
-    for (let i=0;i<len;i++) {
+    for (let i=0; i<len; i++) {
       transitions[i].run(handleComplete, child);
     }
   };
