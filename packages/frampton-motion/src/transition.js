@@ -70,13 +70,13 @@ function once(fn) {
 
 function endOnce(transition, fn) {
   onEvent(transitionend, transition.element).filter((evt) => {
-    return (parseInt(evt.target.getAttribute('data-transition-id')) === transition.id);
+    return (evt.target.getAttribute('data-transition-id') === transition.id);
   }).take(1).next(fn);
 }
 
 function defaultRun(resolve, child) {
 
-  var complete = once(() => {
+  const complete = once(() => {
     setState(this, Transition.CLEANUP);
     reflow(this.element);
     setState(this, Transition.DONE);

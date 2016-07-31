@@ -13,40 +13,52 @@ var global = this;
   require = Frampton.__loader.require;
 
 }());
-define('frampton-motion', ['exports', 'frampton/namespace', 'frampton-motion/prepare', 'frampton-motion/transition', 'frampton-motion/sequence', 'frampton-motion/when', 'frampton-motion/reflow'], function (exports, _framptonNamespace, _framptonMotionPrepare, _framptonMotionTransition, _framptonMotionSequence, _framptonMotionWhen, _framptonMotionReflow) {
+define('frampton-motion', ['frampton/namespace', 'frampton-motion/prepare', 'frampton-motion/transition', 'frampton-motion/sequence', 'frampton-motion/when', 'frampton-motion/reflow'], function (_namespace, _prepare, _transition, _sequence, _when, _reflow) {
   'use strict';
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  var _namespace2 = _interopRequireDefault(_namespace);
 
-  var _Frampton = _interopRequireDefault(_framptonNamespace);
+  var _prepare2 = _interopRequireDefault(_prepare);
 
-  var _prepare = _interopRequireDefault(_framptonMotionPrepare);
+  var _sequence2 = _interopRequireDefault(_sequence);
 
-  var _sequence = _interopRequireDefault(_framptonMotionSequence);
+  var _when2 = _interopRequireDefault(_when);
 
-  var _when = _interopRequireDefault(_framptonMotionWhen);
+  var _reflow2 = _interopRequireDefault(_reflow);
 
-  var _reflow = _interopRequireDefault(_framptonMotionReflow);
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
   /**
    * @name Motion
    * @namespace
    * @memberof Frampton
    */
-  _Frampton['default'].Motion = {};
-  _Frampton['default'].Motion.VERSION = '0.0.9';
-  _Frampton['default'].Motion.prepare = _prepare['default'];
-  _Frampton['default'].Motion.describe = _framptonMotionTransition.describe;
-  _Frampton['default'].Motion.sequence = _sequence['default'];
-  _Frampton['default'].Motion.reflow = _reflow['default'];
-  _Frampton['default'].Motion.when = _when['default'];
+  _namespace2.default.Motion = {};
+  _namespace2.default.Motion.VERSION = '0.0.10';
+  _namespace2.default.Motion.prepare = _prepare2.default;
+  _namespace2.default.Motion.describe = _transition.describe;
+  _namespace2.default.Motion.sequence = _sequence2.default;
+  _namespace2.default.Motion.reflow = _reflow2.default;
+  _namespace2.default.Motion.when = _when2.default;
 });
-define('frampton-motion/animation_end', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
+define('frampton-motion/animation_end', ['exports', 'frampton-style/supported'], function (exports, _supported) {
   'use strict';
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 
-  var _supported = _interopRequireDefault(_framptonStyleSupported);
+  var _supported2 = _interopRequireDefault(_supported);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
   var eventMap = {
     'WebkitAnimation': 'webkitAnimationEnd',
@@ -55,15 +67,18 @@ define('frampton-motion/animation_end', ['exports', 'module', 'frampton-style/su
   };
 
   function animationEnd() {
-    return eventMap[_supported['default']('animation')] || null;
+    return eventMap[(0, _supported2.default)('animation')] || null;
   }
 
-  module.exports = animationEnd();
+  exports.default = animationEnd();
 });
-define('frampton-motion/easing', ['exports', 'module'], function (exports, module) {
+define('frampton-motion/easing', ['exports'], function (exports) {
   'use strict';
 
-  module.exports = {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = {
     'in': 'ease-in',
     'out': 'ease-out',
     'in-out': 'ease-in-out',
@@ -93,18 +108,25 @@ define('frampton-motion/easing', ['exports', 'module'], function (exports, modul
     'ease-in-out-back': 'cubic-bezier(0.680, -0.550, 0.265, 1.550)'
   };
 });
-define('frampton-motion/next_end', ['exports', 'module', 'frampton-utils/noop', 'frampton-events/once', 'frampton-motion/transition_end'], function (exports, module, _framptonUtilsNoop, _framptonEventsOnce, _framptonMotionTransition_end) {
+define('frampton-motion/next_end', ['exports', 'frampton-utils/noop', 'frampton-events/once', 'frampton-motion/transition_end'], function (exports, _noop, _once, _transition_end) {
   'use strict';
 
-  module.exports = next_end;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = next_end;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  var _noop2 = _interopRequireDefault(_noop);
 
-  var _noop = _interopRequireDefault(_framptonUtilsNoop);
+  var _once2 = _interopRequireDefault(_once);
 
-  var _once = _interopRequireDefault(_framptonEventsOnce);
+  var _transition_end2 = _interopRequireDefault(_transition_end);
 
-  var _transitionend = _interopRequireDefault(_framptonMotionTransition_end);
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
   /**
    * Call the given function the next time the element recieves a transitionend
@@ -116,50 +138,56 @@ define('frampton-motion/next_end', ['exports', 'module', 'frampton-utils/noop', 
    * @param {Object} element
    * @param {Function} fn
    */
-
   function next_end(element, fn) {
-    _once['default'](_transitionend['default'], element).next(function (evt) {
-      (fn || _noop['default'])(evt);
+    (0, _once2.default)(_transition_end2.default, element).next(function (evt) {
+      (fn || _noop2.default)(evt);
     });
   }
 });
-define('frampton-motion/normalized_frame', ['exports', 'module', 'frampton-utils/is_number', 'frampton-list/contains', 'frampton-motion/easing'], function (exports, module, _framptonUtilsIs_number, _framptonListContains, _framptonMotionEasing) {
+define('frampton-motion/normalized_frame', ['exports', 'frampton-utils/is_number', 'frampton-list/contains', 'frampton-motion/easing'], function (exports, _is_number, _contains, _easing) {
   'use strict';
 
-  module.exports = normalized_frame;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = normalized_frame;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  var _is_number2 = _interopRequireDefault(_is_number);
 
-  var _isNumber = _interopRequireDefault(_framptonUtilsIs_number);
+  var _contains2 = _interopRequireDefault(_contains);
 
-  var _contains = _interopRequireDefault(_framptonListContains);
+  var _easing2 = _interopRequireDefault(_easing);
 
-  var _easing = _interopRequireDefault(_framptonMotionEasing);
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
   var alias_mapping = {
     'duration': 'transition-duration',
     'delay': 'transition-delay'
   };
 
-  var durations = _contains['default'](['transition-duration', 'transition-delay']);
+  var durations = (0, _contains2.default)(['transition-duration', 'transition-delay']);
 
-  var pixels = _contains['default'](['height', 'width', 'left', 'top', 'right', 'bottom']);
+  var pixels = (0, _contains2.default)(['height', 'width', 'left', 'top', 'right', 'bottom']);
 
   function normalized_frame(frame) {
     var obj = {};
     for (var key in frame) {
       if (alias_mapping[key]) {
-        if (_isNumber['default'](frame[key])) {
+        if ((0, _is_number2.default)(frame[key])) {
           obj[alias_mapping[key]] = frame[key] + 'ms';
         } else {
           obj[alias_mapping[key]] = frame[key];
         }
-      } else if (pixels(key) && _isNumber['default'](frame[key])) {
+      } else if (pixels(key) && (0, _is_number2.default)(frame[key])) {
         obj[key] = frame[key] + 'px';
-      } else if (durations(key) && _isNumber['default'](frame[key])) {
+      } else if (durations(key) && (0, _is_number2.default)(frame[key])) {
         obj[key] = frame[key] + 'ms';
       } else if (key === 'transition-timing-function') {
-        obj[key] = _easing['default'][frame[key]] ? _easing['default'][frame[key]] : frame[key];
+        obj[key] = _easing2.default[frame[key]] ? _easing2.default[frame[key]] : frame[key];
       } else {
         obj[key] = frame[key];
       }
@@ -167,82 +195,109 @@ define('frampton-motion/normalized_frame', ['exports', 'module', 'frampton-utils
     return obj;
   }
 });
-define('frampton-motion/parsed_props', ['exports', 'module', 'frampton-record/reduce', 'frampton-list/contains', 'frampton-style/supported', 'frampton-motion/transitions'], function (exports, module, _framptonRecordReduce, _framptonListContains, _framptonStyleSupported, _framptonMotionTransitions) {
+define('frampton-motion/parsed_props', ['exports', 'frampton-record/reduce', 'frampton-list/contains', 'frampton-style/supported', 'frampton-motion/transitions'], function (exports, _reduce, _contains, _supported, _transitions) {
   'use strict';
 
-  module.exports = parsed_props;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = parsed_props;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  var _reduce2 = _interopRequireDefault(_reduce);
 
-  var _reduceObj = _interopRequireDefault(_framptonRecordReduce);
+  var _contains2 = _interopRequireDefault(_contains);
 
-  var _contains = _interopRequireDefault(_framptonListContains);
+  var _supported2 = _interopRequireDefault(_supported);
 
-  var _supported = _interopRequireDefault(_framptonStyleSupported);
+  var _transitions2 = _interopRequireDefault(_transitions);
 
-  var _transitions = _interopRequireDefault(_framptonMotionTransitions);
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
   function parsed_props(props) {
-    return _reduceObj['default'](function (acc, value, key) {
-      if (!_contains['default'](_transitions['default'], key)) {
-        acc[_supported['default'](key)] = value;
+    return (0, _reduce2.default)(function (acc, value, key) {
+      if (!(0, _contains2.default)(_transitions2.default, key)) {
+        acc[(0, _supported2.default)(key)] = value;
       }
       return acc;
     }, {}, props);
   }
 });
-define('frampton-motion/parsed_timing', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
+define('frampton-motion/parsed_timing', ['exports', 'frampton-style/supported'], function (exports, _supported) {
   'use strict';
 
-  module.exports = parsed_timing;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = parsed_timing;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  var _supported2 = _interopRequireDefault(_supported);
 
-  var _supported = _interopRequireDefault(_framptonStyleSupported);
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
   function parsed_timing(props) {
 
     var timing = {};
 
     if (props['transition-delay']) {
-      timing[_supported['default']('transition-delay')] = props['transition-delay'];
+      timing[(0, _supported2.default)('transition-delay')] = props['transition-delay'];
     }
 
     if (props['transition-duration']) {
-      timing[_supported['default']('transition-duration')] = props['transition-duration'];
+      timing[(0, _supported2.default)('transition-duration')] = props['transition-duration'];
     }
 
     return timing;
   }
 });
-define('frampton-motion/prepare', ['exports', 'module', 'frampton-utils/is_object', 'frampton-style/add_class', 'frampton-style/apply_styles', 'frampton-motion/normalized_frame', 'frampton-motion/reflow'], function (exports, module, _framptonUtilsIs_object, _framptonStyleAdd_class, _framptonStyleApply_styles, _framptonMotionNormalized_frame, _framptonMotionReflow) {
+define('frampton-motion/prepare', ['exports', 'frampton-utils/is_object', 'frampton-style/add_class', 'frampton-style/apply_styles', 'frampton-motion/normalized_frame', 'frampton-motion/reflow'], function (exports, _is_object, _add_class, _apply_styles, _normalized_frame, _reflow) {
   'use strict';
 
-  module.exports = prepare;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = prepare;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  var _is_object2 = _interopRequireDefault(_is_object);
 
-  var _isObject = _interopRequireDefault(_framptonUtilsIs_object);
+  var _add_class2 = _interopRequireDefault(_add_class);
 
-  var _addClass = _interopRequireDefault(_framptonStyleAdd_class);
+  var _apply_styles2 = _interopRequireDefault(_apply_styles);
 
-  var _applyStyles = _interopRequireDefault(_framptonStyleApply_styles);
+  var _normalized_frame2 = _interopRequireDefault(_normalized_frame);
 
-  var _normalizedFrame = _interopRequireDefault(_framptonMotionNormalized_frame);
+  var _reflow2 = _interopRequireDefault(_reflow);
 
-  var _reflow = _interopRequireDefault(_framptonMotionReflow);
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
   function prepare(element, classes, props) {
-    if (_isObject['default'](classes)) {
-      _applyStyles['default'](element, _normalizedFrame['default'](classes));
+    if ((0, _is_object2.default)(classes)) {
+      (0, _apply_styles2.default)(element, (0, _normalized_frame2.default)(classes));
     } else {
-      classes.split(' ').forEach(_addClass['default'](element));
-      _applyStyles['default'](element, _normalizedFrame['default'](props));
+      classes.split(' ').forEach((0, _add_class2.default)(element));
+      (0, _apply_styles2.default)(element, (0, _normalized_frame2.default)(props));
     }
-    return (_reflow['default'](element), true);
+    return (0, _reflow2.default)(element), true;
   }
 });
-define("frampton-motion/reflow", ["exports", "module"], function (exports, module) {
+define("frampton-motion/reflow", ["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = reflow;
   /**
    * Forces browser reflow by reading the offsetHeight of given element
    *
@@ -252,15 +307,17 @@ define("frampton-motion/reflow", ["exports", "module"], function (exports, modul
    * @memberof Frampton.Motion
    * @param {Object} element DomNode to reflow
    */
-  "use strict";
-
-  module.exports = reflow;
-
   function reflow(element) {
     return element.offsetWidth;
   }
 });
-define("frampton-motion/sequence", ["exports", "module"], function (exports, module) {
+define("frampton-motion/sequence", ["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = sequence_transitions;
   /**
    * sequence :: [Transition] -> Transition
    *
@@ -271,10 +328,6 @@ define("frampton-motion/sequence", ["exports", "module"], function (exports, mod
    * @returns {Frampton.Motion.Transition} A new Transition that runs the given tranisitions
    in sequence
    */
-  "use strict";
-
-  module.exports = sequence_transitions;
-
   function sequence_transitions() {
     for (var _len = arguments.length, transitions = Array(_len), _key = 0; _key < _len; _key++) {
       transitions[_key] = arguments[_key];
@@ -285,14 +338,21 @@ define("frampton-motion/sequence", ["exports", "module"], function (exports, mod
     });
   }
 });
-define('frampton-motion/transform_object', ['exports', 'module', 'frampton-motion/transforms'], function (exports, module, _framptonMotionTransforms) {
+define('frampton-motion/transform_object', ['exports', 'frampton-motion/transforms'], function (exports, _transforms) {
   'use strict';
 
-  module.exports = transform_object;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = transform_object;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  var _transforms2 = _interopRequireDefault(_transforms);
 
-  var _transforms = _interopRequireDefault(_framptonMotionTransforms);
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
   /**
    * Give a string representing a CSS transform it returns an object representation
@@ -316,11 +376,10 @@ define('frampton-motion/transform_object', ['exports', 'module', 'frampton-motio
    * @param {String} transform
    * @returns {Object}
    */
-
   function transform_object(transform) {
     var obj = {};
-    for (var i = 0; i < _transforms['default'].length; i++) {
-      var prop = _transforms['default'][i];
+    for (var i = 0; i < _transforms2.default.length; i++) {
+      var prop = _transforms2.default[i];
       var cap = new RegExp(prop + "\\(([^)]+)\\)");
       var matches = cap.exec(transform);
       if (matches && matches.length) {
@@ -330,121 +389,87 @@ define('frampton-motion/transform_object', ['exports', 'module', 'frampton-motio
     return obj;
   }
 });
-define('frampton-motion/transforms', ['exports', 'module'], function (exports, module) {
+define('frampton-motion/transforms', ['exports'], function (exports) {
   'use strict';
 
-  module.exports = ['matrix', 'matrix3d', 'translate', 'translate3d', 'translateX', 'translateY', 'translateZ', 'scale', 'scale3d', 'scaleX', 'scaleY', 'scaleZ', 'rotate', 'rotate3d', 'rotateX', 'rotateY', 'rotateZ', 'skew', 'skewX', 'skewY', 'perspective'];
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = ['matrix', 'matrix3d', 'translate', 'translate3d', 'translateX', 'translateY', 'translateZ', 'scale', 'scale3d', 'scaleX', 'scaleY', 'scaleZ', 'rotate', 'rotate3d', 'rotateX', 'rotateY', 'rotateZ', 'skew', 'skewX', 'skewY', 'perspective'];
 });
-define('frampton-motion/transition_end', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
+define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'frampton-utils/immediate', 'frampton-utils/not', 'frampton-utils/is_empty', 'frampton-utils/is_something', 'frampton-utils/is_string', 'frampton-utils/is_object', 'frampton-utils/guid', 'frampton-utils/noop', 'frampton-utils/not_implemented', 'frampton-list/add', 'frampton-list/copy', 'frampton-list/remove', 'frampton-list/reverse', 'frampton-record/merge', 'frampton-style/set_style', 'frampton-style/apply_styles', 'frampton-style/remove_style', 'frampton-style/remove_styles', 'frampton-style/add_class', 'frampton-style/remove_class', 'frampton-events/on_event', 'frampton-motion/sequence', 'frampton-motion/transition_end', 'frampton-motion/reflow', 'frampton-motion/transition_props', 'frampton-motion/parsed_props', 'frampton-motion/parsed_timing', 'frampton-motion/update_transform', 'frampton-motion/normalized_frame'], function (exports, _assert, _immediate, _not, _is_empty, _is_something, _is_string, _is_object, _guid, _noop, _not_implemented, _add, _copy, _remove, _reverse, _merge, _set_style, _apply_styles, _remove_style, _remove_styles, _add_class, _remove_class, _on_event, _sequence, _transition_end, _reflow, _transition_props, _parsed_props, _parsed_timing, _update_transform, _normalized_frame) {
   'use strict';
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.describe = exports.Transition = undefined;
 
-  var _supported = _interopRequireDefault(_framptonStyleSupported);
+  var _assert2 = _interopRequireDefault(_assert);
 
-  var eventMap = {
-    'WebkitTransition': 'webkitTransitionEnd',
-    'MozTransition': 'transitionend',
-    'transition': 'transitionend'
-  };
+  var _immediate2 = _interopRequireDefault(_immediate);
 
-  function transitionEnd() {
-    return eventMap[_supported['default']('transition')] || null;
+  var _not2 = _interopRequireDefault(_not);
+
+  var _is_empty2 = _interopRequireDefault(_is_empty);
+
+  var _is_something2 = _interopRequireDefault(_is_something);
+
+  var _is_string2 = _interopRequireDefault(_is_string);
+
+  var _is_object2 = _interopRequireDefault(_is_object);
+
+  var _guid2 = _interopRequireDefault(_guid);
+
+  var _noop2 = _interopRequireDefault(_noop);
+
+  var _not_implemented2 = _interopRequireDefault(_not_implemented);
+
+  var _add2 = _interopRequireDefault(_add);
+
+  var _copy2 = _interopRequireDefault(_copy);
+
+  var _remove2 = _interopRequireDefault(_remove);
+
+  var _reverse2 = _interopRequireDefault(_reverse);
+
+  var _merge2 = _interopRequireDefault(_merge);
+
+  var _set_style2 = _interopRequireDefault(_set_style);
+
+  var _apply_styles2 = _interopRequireDefault(_apply_styles);
+
+  var _remove_style2 = _interopRequireDefault(_remove_style);
+
+  var _remove_styles2 = _interopRequireDefault(_remove_styles);
+
+  var _add_class2 = _interopRequireDefault(_add_class);
+
+  var _remove_class2 = _interopRequireDefault(_remove_class);
+
+  var _on_event2 = _interopRequireDefault(_on_event);
+
+  var _sequence2 = _interopRequireDefault(_sequence);
+
+  var _transition_end2 = _interopRequireDefault(_transition_end);
+
+  var _reflow2 = _interopRequireDefault(_reflow);
+
+  var _transition_props2 = _interopRequireDefault(_transition_props);
+
+  var _parsed_props2 = _interopRequireDefault(_parsed_props);
+
+  var _parsed_timing2 = _interopRequireDefault(_parsed_timing);
+
+  var _update_transform2 = _interopRequireDefault(_update_transform);
+
+  var _normalized_frame2 = _interopRequireDefault(_normalized_frame);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
   }
-
-  module.exports = transitionEnd();
-});
-define('frampton-motion/transition_props', ['exports', 'module', 'frampton-style/supported'], function (exports, module, _framptonStyleSupported) {
-  'use strict';
-
-  module.exports = transition_props;
-
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-  var _supported = _interopRequireDefault(_framptonStyleSupported);
-
-  /**
-   * Returns an objec
-   * @name transitionProps
-   * @method
-   * @private
-   * @memberof Frampton.Motion
-   * @param {Object} props
-   * @returns {Object}
-   */
-
-  function transition_props(props) {
-    var trans = {};
-    trans[_supported['default']('transition-property')] = Object.keys(props).join(', ');
-    return trans;
-  }
-});
-define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'frampton-utils/immediate', 'frampton-utils/not', 'frampton-utils/is_empty', 'frampton-utils/is_something', 'frampton-utils/is_string', 'frampton-utils/is_object', 'frampton-utils/guid', 'frampton-utils/noop', 'frampton-utils/not_implemented', 'frampton-list/add', 'frampton-list/copy', 'frampton-list/remove', 'frampton-list/reverse', 'frampton-record/merge', 'frampton-style/set_style', 'frampton-style/apply_styles', 'frampton-style/remove_style', 'frampton-style/remove_styles', 'frampton-style/add_class', 'frampton-style/remove_class', 'frampton-events/on_event', 'frampton-motion/sequence', 'frampton-motion/transition_end', 'frampton-motion/reflow', 'frampton-motion/transition_props', 'frampton-motion/parsed_props', 'frampton-motion/parsed_timing', 'frampton-motion/update_transform', 'frampton-motion/normalized_frame'], function (exports, _framptonUtilsAssert, _framptonUtilsImmediate, _framptonUtilsNot, _framptonUtilsIs_empty, _framptonUtilsIs_something, _framptonUtilsIs_string, _framptonUtilsIs_object, _framptonUtilsGuid, _framptonUtilsNoop, _framptonUtilsNot_implemented, _framptonListAdd, _framptonListCopy, _framptonListRemove, _framptonListReverse, _framptonRecordMerge, _framptonStyleSet_style, _framptonStyleApply_styles, _framptonStyleRemove_style, _framptonStyleRemove_styles, _framptonStyleAdd_class, _framptonStyleRemove_class, _framptonEventsOn_event, _framptonMotionSequence, _framptonMotionTransition_end, _framptonMotionReflow, _framptonMotionTransition_props, _framptonMotionParsed_props, _framptonMotionParsed_timing, _framptonMotionUpdate_transform, _framptonMotionNormalized_frame) {
-  'use strict';
-
-  exports.__esModule = true;
-
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-  var _assert = _interopRequireDefault(_framptonUtilsAssert);
-
-  var _immediate = _interopRequireDefault(_framptonUtilsImmediate);
-
-  var _not = _interopRequireDefault(_framptonUtilsNot);
-
-  var _isEmpty = _interopRequireDefault(_framptonUtilsIs_empty);
-
-  var _isSomething = _interopRequireDefault(_framptonUtilsIs_something);
-
-  var _isString = _interopRequireDefault(_framptonUtilsIs_string);
-
-  var _isObject = _interopRequireDefault(_framptonUtilsIs_object);
-
-  var _guid = _interopRequireDefault(_framptonUtilsGuid);
-
-  var _noop = _interopRequireDefault(_framptonUtilsNoop);
-
-  var _notImplemented = _interopRequireDefault(_framptonUtilsNot_implemented);
-
-  var _add = _interopRequireDefault(_framptonListAdd);
-
-  var _copyList = _interopRequireDefault(_framptonListCopy);
-
-  var _remove = _interopRequireDefault(_framptonListRemove);
-
-  var _reverse = _interopRequireDefault(_framptonListReverse);
-
-  var _merge = _interopRequireDefault(_framptonRecordMerge);
-
-  var _setStyle = _interopRequireDefault(_framptonStyleSet_style);
-
-  var _applyStyles = _interopRequireDefault(_framptonStyleApply_styles);
-
-  var _removeStyle = _interopRequireDefault(_framptonStyleRemove_style);
-
-  var _removeStyles = _interopRequireDefault(_framptonStyleRemove_styles);
-
-  var _addClass = _interopRequireDefault(_framptonStyleAdd_class);
-
-  var _removeClass = _interopRequireDefault(_framptonStyleRemove_class);
-
-  var _onEvent = _interopRequireDefault(_framptonEventsOn_event);
-
-  var _sequence = _interopRequireDefault(_framptonMotionSequence);
-
-  var _transitionend = _interopRequireDefault(_framptonMotionTransition_end);
-
-  var _reflow = _interopRequireDefault(_framptonMotionReflow);
-
-  var _transitionProps = _interopRequireDefault(_framptonMotionTransition_props);
-
-  var _parsedProps = _interopRequireDefault(_framptonMotionParsed_props);
-
-  var _parsedTiming = _interopRequireDefault(_framptonMotionParsed_timing);
-
-  var _updateTransform = _interopRequireDefault(_framptonMotionUpdate_transform);
-
-  var _normalizedFrame = _interopRequireDefault(_framptonMotionNormalized_frame);
 
   function inverseDirection(dir) {
     return dir === Transition.DIR_IN ? Transition.DIR_OUT : Transition.DIR_IN;
@@ -491,8 +516,8 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
   }
 
   function endOnce(transition, fn) {
-    _onEvent['default'](_transitionend['default'], transition.element).filter(function (evt) {
-      return parseInt(evt.target.getAttribute('data-transition-id')) === transition.id;
+    (0, _on_event2.default)(_transition_end2.default, transition.element).filter(function (evt) {
+      return evt.target.getAttribute('data-transition-id') === transition.id;
     }).take(1).next(fn);
   }
 
@@ -501,10 +526,10 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 
     var complete = once(function () {
       setState(_this, Transition.CLEANUP);
-      _reflow['default'](_this.element);
+      (0, _reflow2.default)(_this.element);
       setState(_this, Transition.DONE);
-      _immediate['default'](function () {
-        (resolve || _noop['default'])(_this.element);
+      (0, _immediate2.default)(function () {
+        (resolve || _noop2.default)(_this.element);
       });
     });
 
@@ -514,7 +539,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
      * the correct current state of our element in which to start the transition
      * from.
      */
-    _reflow['default'](this.element);
+    (0, _reflow2.default)(this.element);
 
     this.element.setAttribute('data-transition-id', this.id);
 
@@ -522,19 +547,19 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 
     setDirection(this, this.direction);
 
-    _immediate['default'](function () {
+    (0, _immediate2.default)(function () {
       if (_this.direction === Transition.DIR_IN) {
-        _this.classList.forEach(_addClass['default'](_this.element));
-        if (_isSomething['default'](_this.frame)) {
-          _applyStyles['default'](_this.element, _this.config);
-          _reflow['default'](_this.element);
-          _applyStyles['default'](_this.element, _this.supported);
+        _this.classList.forEach((0, _add_class2.default)(_this.element));
+        if ((0, _is_something2.default)(_this.frame)) {
+          (0, _apply_styles2.default)(_this.element, _this.config);
+          (0, _reflow2.default)(_this.element);
+          (0, _apply_styles2.default)(_this.element, _this.supported);
         }
       } else {
-        _this.classList.forEach(_removeClass['default'](_this.element));
-        if (_isSomething['default'](_this.frame)) {
-          _applyStyles['default'](_this.element, _this.config);
-          _reflow['default'](_this.element);
+        _this.classList.forEach((0, _remove_class2.default)(_this.element));
+        if ((0, _is_something2.default)(_this.frame)) {
+          (0, _apply_styles2.default)(_this.element, _this.config);
+          (0, _reflow2.default)(_this.element);
           resolveStyles(_this.element, _this.supported, findChild(child, _this.element));
         }
       }
@@ -566,13 +591,13 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
     if (child && child.direction === Transition.DIR_OUT && child.element === element) {
       for (var key in frame) {
         if (child.frame && child.frame[key]) {
-          _setStyle['default'](element, key, child.frame[key]);
+          (0, _set_style2.default)(element, key, child.frame[key]);
         } else {
-          _removeStyle['default'](element, key);
+          (0, _remove_style2.default)(element, key);
         }
       }
     } else {
-      _removeStyles['default'](element, frame);
+      (0, _remove_styles2.default)(element, frame);
     }
   }
 
@@ -584,13 +609,13 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
 
   function withFrame(transition, props) {
 
-    var frame = _isSomething['default'](transition.frame) ? transition.frame : {};
+    var frame = (0, _is_something2.default)(transition.frame) ? transition.frame : {};
 
     for (var key in props) {
       frame[key] = props[key];
     }
 
-    return withDefaultRun(transition.element, _copyList['default'](transition.classList), frame, transition.direction);
+    return withDefaultRun(transition.element, (0, _copy2.default)(transition.classList), frame, transition.direction);
   }
 
   /**
@@ -605,22 +630,22 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   function Transition(element, list, frame, dir) {
 
-    _assert['default']('Browser does not support CSS transitions', _isSomething['default'](_transitionend['default']));
+    (0, _assert2.default)('Browser does not support CSS transitions', (0, _is_something2.default)(_transition_end2.default));
 
-    this.id = _guid['default']();
+    this.id = (0, _guid2.default)();
     this.name = Transition.NORMAL;
-    this.element = _isSomething['default'](element) ? element : null;
-    this.direction = _isSomething['default'](dir) ? dir : Transition.DIR_IN;
-    this.frame = _isSomething['default'](frame) ? _normalizedFrame['default'](frame) : null;
+    this.element = (0, _is_something2.default)(element) ? element : null;
+    this.direction = (0, _is_something2.default)(dir) ? dir : Transition.DIR_IN;
+    this.frame = (0, _is_something2.default)(frame) ? (0, _normalized_frame2.default)(frame) : null;
     this.config = null;
     this.supported = null;
-    this.classList = (_isSomething['default'](list) ? list : []).filter(_not['default'](_isEmpty['default']));
+    this.classList = ((0, _is_something2.default)(list) ? list : []).filter((0, _not2.default)(_is_empty2.default));
     this.state = Transition.WAITING;
     this.list = [this];
 
-    if (_isObject['default'](this.frame)) {
-      this.supported = _parsedProps['default'](this.frame);
-      this.config = _merge['default'](_parsedTiming['default'](this.frame), _transitionProps['default'](this.supported));
+    if ((0, _is_object2.default)(this.frame)) {
+      this.supported = (0, _parsed_props2.default)(this.frame);
+      this.config = (0, _merge2.default)((0, _parsed_timing2.default)(this.frame), (0, _transition_props2.default)(this.supported));
     }
 
     setState(this, this.state);
@@ -634,7 +659,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    * @memberof Frampton.Motion.Transition#
    * @param {Function} resolve Function to call when transition is complete.
    */
-  Transition.prototype.run = _notImplemented['default'];
+  Transition.prototype.run = _not_implemented2.default;
 
   /**
    * @name delay
@@ -645,7 +670,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.delay = function Transition_delay(time) {
     return withFrame(this, {
-      'transition-delay': _isString['default'](time) ? time : time + 'ms'
+      'transition-delay': (0, _is_string2.default)(time) ? time : time + 'ms'
     });
   };
 
@@ -658,7 +683,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.duration = function Transition_duration(time) {
     return withFrame(this, {
-      'transition-duration': _isString['default'](time) ? time : time + 'ms'
+      'transition-duration': (0, _is_string2.default)(time) ? time : time + 'ms'
     });
   };
 
@@ -671,7 +696,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.width = function Transition_width(width) {
     return withFrame(this, {
-      width: _isString['default'](width) ? width : width + 'px'
+      width: (0, _is_string2.default)(width) ? width : width + 'px'
     });
   };
 
@@ -684,7 +709,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.height = function Transition_width(height) {
     return withFrame(this, {
-      height: _isString['default'](height) ? height : height + 'px'
+      height: (0, _is_string2.default)(height) ? height : height + 'px'
     });
   };
 
@@ -698,8 +723,8 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.dimensions = function Transition_width(width, height) {
     return withFrame(this, {
-      width: _isString['default'](width) ? width : width + 'px',
-      height: _isString['default'](height) ? height : height + 'px'
+      width: (0, _is_string2.default)(width) ? width : width + 'px',
+      height: (0, _is_string2.default)(height) ? height : height + 'px'
     });
   };
 
@@ -712,7 +737,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.top = function Transition_top(position) {
     return withFrame(this, {
-      top: _isString['default'](position) ? position : position + 'px'
+      top: (0, _is_string2.default)(position) ? position : position + 'px'
     });
   };
 
@@ -725,7 +750,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.left = function Transition_left(position) {
     return withFrame(this, {
-      left: _isString['default'](position) ? position : position + 'px'
+      left: (0, _is_string2.default)(position) ? position : position + 'px'
     });
   };
 
@@ -739,8 +764,8 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.position = function Transition_position(left, top) {
     return withFrame(this, {
-      top: _isString['default'](left) ? left : left + 'px',
-      left: _isString['default'](top) ? top : top + 'px'
+      top: (0, _is_string2.default)(left) ? left : left + 'px',
+      left: (0, _is_string2.default)(top) ? top : top + 'px'
     });
   };
 
@@ -766,7 +791,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.translateX = function Transition_translateX(distance) {
     return withFrame(this, {
-      transform: _updateTransform['default'](_isSomething['default'](this.frame) ? this.frame['transform'] : null, 'translateX', _isString['default'](distance) ? distance : distance + 'px')
+      transform: (0, _update_transform2.default)((0, _is_something2.default)(this.frame) ? this.frame['transform'] : null, 'translateX', (0, _is_string2.default)(distance) ? distance : distance + 'px')
     });
   };
 
@@ -779,7 +804,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.translateY = function Transition_translateY(distance) {
     return withFrame(this, {
-      transform: _updateTransform['default'](_isSomething['default'](this.frame) ? this.frame['transform'] : null, 'translateY', _isString['default'](distance) ? distance : distance + 'px')
+      transform: (0, _update_transform2.default)((0, _is_something2.default)(this.frame) ? this.frame['transform'] : null, 'translateY', (0, _is_string2.default)(distance) ? distance : distance + 'px')
     });
   };
 
@@ -792,7 +817,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.translateZ = function Transition_translateZ(distance) {
     return withFrame(this, {
-      transform: _updateTransform['default'](_isSomething['default'](this.frame) ? this.frame['transform'] : null, 'translateZ', _isString['default'](distance) ? distance : distance + 'px')
+      transform: (0, _update_transform2.default)((0, _is_something2.default)(this.frame) ? this.frame['transform'] : null, 'translateZ', (0, _is_string2.default)(distance) ? distance : distance + 'px')
     });
   };
 
@@ -805,7 +830,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.rotate = function Transition_translateZ(degrees) {
     return withFrame(this, {
-      transform: _updateTransform['default'](_isSomething['default'](this.frame) ? this.frame['transform'] : null, 'rotate', _isString['default'](degrees) ? degrees : degrees + 'deg')
+      transform: (0, _update_transform2.default)((0, _is_something2.default)(this.frame) ? this.frame['transform'] : null, 'rotate', (0, _is_string2.default)(degrees) ? degrees : degrees + 'deg')
     });
   };
 
@@ -818,7 +843,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   Transition.prototype.scale = function Transition_scale(scale) {
     return withFrame(this, {
-      transform: _updateTransform['default'](_isSomething['default'](this.frame) ? this.frame['transform'] : null, 'scale', scale)
+      transform: (0, _update_transform2.default)((0, _is_something2.default)(this.frame) ? this.frame['transform'] : null, 'scale', scale)
     });
   };
 
@@ -830,7 +855,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    * @returns {Frampton.Motion.Transition}
    */
   Transition.prototype.addClass = function Transition_addClass(name) {
-    return withDefaultRun(this.element, _add['default'](this.classList, name), _isSomething['default'](this.frame) ? this.frame : null, this.direction);
+    return withDefaultRun(this.element, (0, _add2.default)(this.classList, name), (0, _is_something2.default)(this.frame) ? this.frame : null, this.direction);
   };
 
   /**
@@ -841,7 +866,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    * @returns {Frampton.Motion.Transition}
    */
   Transition.prototype.removeClass = function Transition_removeClass(name) {
-    return withDefaultRun(this.element, _remove['default'](this.classList, name), _isSomething['default'](this.frame) ? this.frame : null, this.direction);
+    return withDefaultRun(this.element, (0, _remove2.default)(this.classList, name), (0, _is_something2.default)(this.frame) ? this.frame : null, this.direction);
   };
 
   /**
@@ -851,7 +876,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    * @returns {Frampton.Motion.Transition}
    */
   Transition.prototype.reverse = function Transition_reverse() {
-    return withDefaultRun(this.element, _copyList['default'](this.classList), _isSomething['default'](this.frame) ? this.frame : null, inverseDirection(this.direction));
+    return withDefaultRun(this.element, (0, _copy2.default)(this.classList), (0, _is_something2.default)(this.frame) ? this.frame : null, inverseDirection(this.direction));
   };
 
   /**
@@ -867,7 +892,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
     var saved = this.run.bind(this);
 
     trans.name = Transition.CHAINED;
-    trans.list = _add['default'](this.list, child);
+    trans.list = (0, _add2.default)(this.list, child);
 
     trans.run = function chain_run(resolve, next) {
       saved(function () {
@@ -876,7 +901,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
     };
 
     trans.reverse = function chain_reverse() {
-      return _sequence['default'].apply(null, _reverse['default'](trans.list).map(function (next) {
+      return _sequence2.default.apply(null, (0, _reverse2.default)(trans.list).map(function (next) {
         return next.reverse();
       }));
     };
@@ -907,33 +932,101 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/assert', 'framp
    */
   function describe(element, name, frame, dir) {
 
-    if (_isObject['default'](name)) {
+    if ((0, _is_object2.default)(name)) {
       dir = frame;
       frame = name;
       name = null;
     }
 
-    return withDefaultRun(element, _isString['default'](name) ? name.split(' ') : null, _isObject['default'](frame) ? frame : null, dir === false ? Transition.DIR_OUT : Transition.DIR_IN);
+    return withDefaultRun(element, (0, _is_string2.default)(name) ? name.split(' ') : null, (0, _is_object2.default)(frame) ? frame : null, dir === false ? Transition.DIR_OUT : Transition.DIR_IN);
   }
 
   exports.Transition = Transition;
   exports.describe = describe;
 });
-define('frampton-motion/transitions', ['exports', 'module'], function (exports, module) {
+define('frampton-motion/transition_end', ['exports', 'frampton-style/supported'], function (exports, _supported) {
   'use strict';
 
-  module.exports = ['transition-delay', 'transition-duration', 'transition-property', 'transition-timing-function'];
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _supported2 = _interopRequireDefault(_supported);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  var eventMap = {
+    'WebkitTransition': 'webkitTransitionEnd',
+    'MozTransition': 'transitionend',
+    'transition': 'transitionend'
+  };
+
+  function transitionEnd() {
+    return eventMap[(0, _supported2.default)('transition')] || null;
+  }
+
+  exports.default = transitionEnd();
 });
-define('frampton-motion/update_transform', ['exports', 'module', 'frampton-utils/is_string', 'frampton-string/contains'], function (exports, module, _framptonUtilsIs_string, _framptonStringContains) {
+define('frampton-motion/transition_props', ['exports', 'frampton-style/supported'], function (exports, _supported) {
   'use strict';
 
-  module.exports = updateTransform;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = transition_props;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  var _supported2 = _interopRequireDefault(_supported);
 
-  var _isString = _interopRequireDefault(_framptonUtilsIs_string);
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
-  var _contains = _interopRequireDefault(_framptonStringContains);
+  /**
+   * Returns an objec
+   * @name transitionProps
+   * @method
+   * @private
+   * @memberof Frampton.Motion
+   * @param {Object} props
+   * @returns {Object}
+   */
+  function transition_props(props) {
+    var trans = {};
+    trans[(0, _supported2.default)('transition-property')] = Object.keys(props).join(', ');
+    return trans;
+  }
+});
+define('frampton-motion/transitions', ['exports'], function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = ['transition-delay', 'transition-duration', 'transition-property', 'transition-timing-function'];
+});
+define('frampton-motion/update_transform', ['exports', 'frampton-utils/is_string', 'frampton-string/contains'], function (exports, _is_string, _contains) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = updateTransform;
+
+  var _is_string2 = _interopRequireDefault(_is_string);
+
+  var _contains2 = _interopRequireDefault(_contains);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
   function propValue(prop, value) {
     return prop + '(' + value + ')';
@@ -949,14 +1042,13 @@ define('frampton-motion/update_transform', ['exports', 'module', 'frampton-utils
    * @param {String|Number} value
    * @returns {String}
    */
-
   function updateTransform(transform, prop, value) {
-    var reg;
-    transform = (_isString['default'](transform) ? transform : '').trim();
 
-    if (_contains['default'](prop, transform)) {
-      reg = new RegExp(prop + "\\([^)]*\\)");
-      if (_isString['default'](value) && value.trim() !== '') {
+    transform = ((0, _is_string2.default)(transform) ? transform : '').trim();
+
+    if ((0, _contains2.default)(prop, transform)) {
+      var reg = new RegExp(prop + "\\([^)]*\\)");
+      if ((0, _is_string2.default)(value) && value.trim() !== '') {
         transform = transform.replace(reg, propValue(prop, value));
       } else {
         transform = transform.replace(reg, '').replace('  ', ' ');
@@ -967,17 +1059,25 @@ define('frampton-motion/update_transform', ['exports', 'module', 'frampton-utils
       }
       transform = transform + propValue(prop, value);
     }
+
     return transform.trim();
   }
 });
-define('frampton-motion/when', ['exports', 'module', 'frampton-utils/noop', 'frampton-motion/transition'], function (exports, module, _framptonUtilsNoop, _framptonMotionTransition) {
+define('frampton-motion/when', ['exports', 'frampton-utils/noop', 'frampton-motion/transition'], function (exports, _noop, _transition) {
   'use strict';
 
-  module.exports = when;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = when;
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  var _noop2 = _interopRequireDefault(_noop);
 
-  var _noop = _interopRequireDefault(_framptonUtilsNoop);
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
   /**
    * when :: [Transition] -> Transition
@@ -993,14 +1093,13 @@ define('frampton-motion/when', ['exports', 'module', 'frampton-utils/noop', 'fra
    * @returns {Frampton.Motion.Transition} A new Transition that runs the given tranisitions
    in parallel
    */
-
   function when() {
     for (var _len = arguments.length, transitions = Array(_len), _key = 0; _key < _len; _key++) {
       transitions[_key] = arguments[_key];
     }
 
-    var transition = new _framptonMotionTransition.Transition();
-    transition.name = _framptonMotionTransition.Transition.WHEN;
+    var transition = new _transition.Transition();
+    transition.name = _transition.Transition.WHEN;
     transition.list = transitions;
 
     transition.reverse = function when_reverse() {
@@ -1011,18 +1110,18 @@ define('frampton-motion/when', ['exports', 'module', 'frampton-utils/noop', 'fra
 
     transition.run = function when_run(resolve, child) {
 
+      var count = 0;
       var len = transitions.length;
 
-      var _loop = function (i) {
-        transitions[i].run(function () {
-          if (i === len - 1) {
-            (resolve || _noop['default'])();
-          }
-        }, child);
-      };
+      function handleComplete() {
+        count += 1;
+        if (count === len - 1) {
+          (resolve || _noop2.default)();
+        }
+      }
 
       for (var i = 0; i < len; i++) {
-        _loop(i);
+        transitions[i].run(handleComplete, child);
       }
     };
 
@@ -1030,5 +1129,4 @@ define('frampton-motion/when', ['exports', 'module', 'frampton-utils/noop', 'fra
   }
 });
 require("frampton-motion");
-
 })();
