@@ -15,7 +15,7 @@ import supported from 'frampton-style/supported';
  * @name transitionProps
  * @method
  * @private
- * @memberof Frampton.Motion
+ * @memberof Frampton.Motion.Utils
  * @param {Object} props
  * @returns {Object}
  */

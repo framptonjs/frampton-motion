@@ -341,7 +341,7 @@ Transition.prototype.reverse = function Transition_reverse() {
 };
 
 /**
- * @name reverse
+ * @name chain
  * @method
  * @memberof Frampton.Motion.Transition#
  * @param {Frampton.Motion.Transition} child Transition to run after this transition.

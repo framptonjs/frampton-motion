@@ -1,4 +1,4 @@
-import emptyClass from 'frampton-motion/utils/empty_class';
+import emptyClass from 'frampton-motion/data/empty_class';
 import validatedTransition from 'frampton-motion/utils/validated_transition';
 
 QUnit.module('Frampton.Motion.Utils.validatedTransition');
@@ -12,6 +12,25 @@ QUnit.test('Should return an empty tranition for null', function(assert) {
     },
     to : {
       class : emptyClass(),
+      style : {}
+    }
+  };
+
+  assert.deepEqual(actual, expected);
+});
+
+QUnit.test('Should return transition for string', function(assert) {
+  const actual = validatedTransition('test class');
+  const expected = {
+    from : {
+      class : emptyClass(),
+      style : {}
+    },
+    to : {
+      class : {
+        add : ['test', 'class'],
+        remove : []
+      },
       style : {}
     }
   };

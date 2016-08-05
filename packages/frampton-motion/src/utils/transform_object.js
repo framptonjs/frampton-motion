@@ -18,7 +18,7 @@ import transforms from 'frampton-motion/data/transforms';
  * @name transformObject
  * @method
  * @private
- * @memberof Frampton.Motion
+ * @memberof Frampton.Motion.Utils
  * @param {String} transform
  * @returns {Object}
  */

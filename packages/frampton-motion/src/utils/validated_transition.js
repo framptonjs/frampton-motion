@@ -1,15 +1,30 @@
 import isNothing from 'frampton-utils/is_nothing';
+import isString from 'frampton-utils/is_string';
 import normalizedFrame from 'frampton-motion/utils/normalized_frame';
 import validatedClass from 'frampton-motion/utils/validated_class';
-import emptyTransition from 'frampton-motion/utils/empty_transition';
+import emptyDescription from 'frampton-motion/data/empty_description';
 
+/**
+ * @name validatedTransition
+ * @memberof Frampton.Motion.Utils
+ * @private
+ * @param {String|Object} desc A description of the transition
+ * @returns {Object} An object representing a transition.
+ */
 export default function validated_transition(desc) {
 
-  if (isNothing(desc)) {
-    return emptyTransition();
-  } else {
+  const newTransition = emptyDescription();
 
-    const newTransition = emptyTransition();
+  if (isNothing(desc)) {
+
+    return newTransition;
+
+  } else if (isString(desc)) {
+
+    newTransition.to.class = validatedClass(desc);
+    return newTransition;
+
+  } else {
 
     if (desc.from || desc.to || desc.style || desc.class) {
       if (desc.from && (desc.from.style || desc.from.class)) {
