@@ -24,9 +24,11 @@ Currently Motion exposes three public methods: describe, when and sequence.
 
 ### Describe
 
+With the describe function you provide a description of the transition you wish to run and you get back a Transition object that can be used to run that transition. The description of a transition always starts with the element that transition is to be run on. The second argument to describe can be either a string, representing classes to apply to the element, or an object representing some combination of styles and/or classes to apply to the element.
+
 The describe function will automatically apply any vendor prefixes required by the browser running the code. It also aliases duration to transition-duration and delay to transition-delay to save a few key strokes.
 
-The describe function returns a Transition object. When we describe a transition we do not run that transition. The Transition object has a method to perform the transition. Transitions can be reused over and over. Each time you call the 'run' method on a Transition object it will apply the described transition to the element.
+When we describe a transition we do not run that transition. The Transition object has a method to perform the transition. Transitions can be reused over and over. Each time you call the 'run' method on a Transition object it will apply the described transition to the element.
 
 ```
 const describe = Frampton.Motion.describe;
@@ -116,6 +118,22 @@ const myTransition = describe(element, {
 });
 ```
 
+#### Running a Transition
+
+The run method takes a callback to run when the transition is complete. The callback receives a single argument, a reference to the element that was being transitioned.
+
+```
+const hide = describe(element, {
+  height : 0,
+  opacity : 0,
+  duration : 500
+});
+
+hide.run((el) => {
+  el.remove();
+});
+```
+
 #### Modifying Transitions
 
 All methods on the Transition object, other than the run method, return a new Transition.
@@ -126,9 +144,7 @@ Transitions can be reversed. Reversing a Transition returns a new Transition tha
 const hide = describe(element, { opacity : 0 });
 const show = hide.reverse();
 
-const hideThenShow = hide.chain(show);
-
-hideThenShow.run(function() {
+show.run(() => {
   // hide is unchanged. we can use it here
   hide.run();
 });
@@ -184,22 +200,7 @@ const showModal = when(fadeInMask, fadeInDialog);
 const hideModal = showModal.reverse();
 
 const showThenHide = sequence(showModal, hideModal);
-```
-
-### Running a Transition
-
-As mentioned earlier, there is a run method to perform the transition. The run method takes a callback to run when the transition is complete. The callback receives a single argument, a reference to the element that was being transitioned.
-
-```
-const myTransition = describe(element, {
-  height : 0,
-  opacity : 0,
-  duration : 500
-});
-
-myTransition.run((el) => {
-  el.remove();
-});
+const hideThenShow = showThenHide.reverse();
 ```
 
 ### Be Aware
