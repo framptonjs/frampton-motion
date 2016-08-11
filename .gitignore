@@ -4,3 +4,4 @@ dist/frampton-motion-tests.js
 docs/
 notes.txt
 tmp
+*.log
