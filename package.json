@@ -6,7 +6,9 @@
     "test": "frampton test",
     "build": "frampton build",
     "clean-install": "rm -rfv node_modules; npm install",
-    "deploy": "git push -u origin master; npm publish ./",
+    "release": "frampton release --patch",
+    "minor-release": "frampton release --minor",
+    "major-release": "frampton release --major",
     "docs": "rm -rfv docs/* && jsdoc dist/frampton-motion.js -d docs --readme README.md --private"
   },
   "author": "Kevin Greene <hightimesteddy@gmail.com>",
@@ -22,7 +24,7 @@
   "devDependencies": {
     "frampton": "0.1.9",
     "frampton-build": "0.0.6",
-    "frampton-cli": "0.0.6",
+    "frampton-cli": "0.0.8",
     "jsdoc": "3.4.0"
   }
 }

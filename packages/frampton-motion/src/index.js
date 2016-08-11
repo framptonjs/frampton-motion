@@ -9,7 +9,7 @@ import when from 'frampton-motion/when';
  * @memberof Frampton
  */
 Frampton.Motion          = {};
-Frampton.Motion.VERSION  = '0.1.0';
+Frampton.Motion.VERSION  = '{-- VERSION_PLACEHOLDER --}';
 Frampton.Motion.describe = describe;
 Frampton.Motion.sequence = sequence;
 Frampton.Motion.when     = when;
