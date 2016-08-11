@@ -34,7 +34,7 @@ define('frampton-motion', ['frampton/namespace', 'frampton-motion/transition', '
    * @memberof Frampton
    */
   _namespace2.default.Motion = {};
-  _namespace2.default.Motion.VERSION = '0.1.0';
+  _namespace2.default.Motion.VERSION = '0.1.1';
   _namespace2.default.Motion.describe = _transition.describe;
   _namespace2.default.Motion.sequence = _sequence2.default;
   _namespace2.default.Motion.when = _when2.default;

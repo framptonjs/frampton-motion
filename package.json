@@ -1,6 +1,6 @@
 {
   "name": "frampton-motion",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A module for frampton.js to manage CSS transitions in JavaScript",
   "scripts": {
     "test": "frampton test",
