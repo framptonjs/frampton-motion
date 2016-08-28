@@ -782,7 +782,8 @@ define('frampton-motion/utils/end_once', ['exports', 'frampton-events/on_event',
 
   function end_once(transition, fn) {
     (0, _on_event2.default)(_transition_end2.default, transition.element).filter(function (evt) {
-      var testId = evt.target.getAttribute('data-transition-id').trim();
+      var dataId = evt.target.getAttribute('data-transition-id');
+      var testId = (dataId || '').trim();
       return testId === transition.id;
     }).take(1).next(fn);
   }
