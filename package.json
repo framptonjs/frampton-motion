@@ -5,11 +5,11 @@
   "scripts": {
     "test": "frampton test",
     "build": "frampton build",
-    "clean-install": "rm -rfv node_modules; npm install",
+    "clean-install": "rm -rf node_modules; npm install",
     "release": "frampton release --patch",
     "minor-release": "frampton release --minor",
     "major-release": "frampton release --major",
-    "docs": "rm -rfv docs/* && jsdoc dist/frampton-motion.js -d docs --readme README.md --private"
+    "docs": "rm -rf docs/* && jsdoc dist/frampton-motion.js -d docs --readme README.md --private"
   },
   "author": "Kevin Greene <hightimesteddy@gmail.com>",
   "license": "BSD",
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/framptonjs/frampton-motion",
   "devDependencies": {
-    "frampton": "0.2.2",
+    "frampton": "0.2.3",
     "frampton-build": "0.0.6",
     "frampton-cli": "0.0.10",
     "jsdoc": "3.4.0"
