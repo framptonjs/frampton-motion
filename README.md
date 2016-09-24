@@ -1,5 +1,7 @@
 # Frampton-Motion
 
+[![Build Status](https://semaphoreci.com/api/v1/beatniklarry/frampton-motion/branches/master/badge.svg)](https://semaphoreci.com/beatniklarry/frampton-motion)
+
 Managing CSS transitions and animations in JavaScript are a perfect opportunity to flex a little functional muscle. Most code surrounding what transitions and animations should do and how they should behave is pure. It's declarative and doesn't do anything except say what we want to happen. If our descriptions are horrible and have no chance at success, there's still no reason that those descriptions can't be maintained by immutable data structures and a declarative API. The actual performance of the transition or animation is what causes side effects and is what can go horribly wrong. We'll keep that stuff in a corner somewhere so the rest of our code is declarative and beautiful.
 
 This module will add objects and functions to Frampton to manage CSS transitions in a declarative manner.
