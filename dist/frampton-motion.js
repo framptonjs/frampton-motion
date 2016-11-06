@@ -480,7 +480,7 @@ define('frampton-motion/transition', ['exports', 'frampton-utils/is_something', 
    * @param {Number} degrees
    * @returns {Frampton.Motion.Transition}
    */
-  Transition.prototype.rotate = function Transition_translateZ(degrees) {
+  Transition.prototype.rotate = function Transition_rotate(degrees) {
     return withFrame(this, {
       transform: (0, _update_transform2.default)((0, _is_something2.default)(this.frame) ? this.frame['transform'] : null, 'rotate', (0, _is_string2.default)(degrees) ? degrees : degrees + 'deg')
     });

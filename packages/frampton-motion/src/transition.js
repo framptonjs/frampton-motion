@@ -261,7 +261,7 @@ Transition.prototype.translateZ = function Transition_translateZ(distance) {
  * @param {Number} degrees
  * @returns {Frampton.Motion.Transition}
  */
-Transition.prototype.rotate = function Transition_translateZ(degrees) {
+Transition.prototype.rotate = function Transition_rotate(degrees) {
   return withFrame(this, {
     transform : updateTransform(
       (isSomething(this.frame) ? this.frame['transform'] : null),
