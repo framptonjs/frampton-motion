@@ -3,7 +3,7 @@ import validatedTransition from 'frampton-motion/utils/validated_transition';
 
 QUnit.module('Frampton.Motion.Utils.validatedTransition');
 
-QUnit.test('Should return an empty tranition for null', function(assert) {
+QUnit.test('returns an empty tranition for null', function(assert) {
   const actual = validatedTransition(null);
   const expected = {
     from : {
@@ -19,7 +19,7 @@ QUnit.test('Should return an empty tranition for null', function(assert) {
   assert.deepEqual(actual, expected);
 });
 
-QUnit.test('Should return transition for string', function(assert) {
+QUnit.test('returns transition for string', function(assert) {
   const actual = validatedTransition('test class');
   const expected = {
     from : {
@@ -38,7 +38,7 @@ QUnit.test('Should return transition for string', function(assert) {
   assert.deepEqual(actual, expected);
 });
 
-QUnit.test('Should return proper formatting for missing from/to blocks', function(assert) {
+QUnit.test('returns proper formatting for missing from/to blocks', function(assert) {
   const tansition = {
     class : 'test',
     style : {}
@@ -61,7 +61,7 @@ QUnit.test('Should return proper formatting for missing from/to blocks', functio
   assert.deepEqual(actual, expected);
 });
 
-QUnit.test('Should correctly format class strings', function(assert) {
+QUnit.test('correctly formats class strings', function(assert) {
   const tansition = {
     from : {
       class : 'test',

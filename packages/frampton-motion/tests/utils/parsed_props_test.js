@@ -2,7 +2,7 @@ import parsedProps from 'frampton-motion/utils/parsed_props';
 
 QUnit.module('Frampton.Motion.Utils.parsedProps');
 
-QUnit.test('Should correctly filter transition properties', function(assert) {
+QUnit.test('correctly filters transition properties', function(assert) {
   const frame = {
     'height' : 0,
     'opacity' : 0,

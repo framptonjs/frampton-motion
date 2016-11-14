@@ -2,7 +2,7 @@ import transitionProps from 'frampton-motion/utils/transition_props';
 
 QUnit.module('Frampton.Motion.Utils.transitionProps');
 
-QUnit.test('should generate transition-property from hash', function(assert) {
+QUnit.test('generates transition-property from hash', function(assert) {
   const frame = {
     'height'  : 0,
     'width'   : 0,

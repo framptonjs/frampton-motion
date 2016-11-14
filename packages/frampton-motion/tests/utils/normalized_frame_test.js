@@ -2,7 +2,7 @@ import normalizedFrame from 'frampton-motion/utils/normalized_frame';
 
 QUnit.module('Frampton.Motion.Utils.normalizedFrame');
 
-QUnit.test('should return object with props correctly formatted', function(assert) {
+QUnit.test('returns object with props correctly formatted', function(assert) {
   const frame = {
     'height' : 0,
     'transition-duration' : 300,

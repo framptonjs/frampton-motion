@@ -38,7 +38,7 @@ QUnit.module('Frampton.Motion.when', {
   }
 });
 
-QUnit.test('Should run callback on complete transition sequence', function(assert) {
+QUnit.test('runs callback on complete transition sequence', function(assert) {
   const done = assert.async();
   const frameOne = {
     'height' : '0px',
@@ -61,7 +61,7 @@ QUnit.test('Should run callback on complete transition sequence', function(asser
   });
 });
 
-QUnit.test('Should be reversable', function(assert) {
+QUnit.test('is reversable', function(assert) {
   const done = assert.async();
   const frameOne = {
     'height' : '0px',
@@ -89,7 +89,7 @@ QUnit.test('Should be reversable', function(assert) {
   });
 });
 
-QUnit.test('Should work with nested elements', function(assert) {
+QUnit.test('works with nested elements', function(assert) {
   const done = assert.async();
   const frameOne = {
     'height' : '0px',

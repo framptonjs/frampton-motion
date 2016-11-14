@@ -20,7 +20,7 @@ QUnit.module('Frampton.Motion.describe', {
   }
 });
 
-QUnit.test('Should run callback on complete transition', function(assert) {
+QUnit.test('runs callback on complete transition', function(assert) {
   const done = assert.async();
   const frame = {
     'height' : '0px',
@@ -36,7 +36,7 @@ QUnit.test('Should run callback on complete transition', function(assert) {
   });
 });
 
-QUnit.test('Reverse method should create a reversed transition', function(assert) {
+QUnit.test('reverse method creates a reversed transition', function(assert) {
   const done = assert.async();
   const frame = {
     'height' : '0px',
@@ -56,7 +56,7 @@ QUnit.test('Reverse method should create a reversed transition', function(assert
   });
 });
 
-QUnit.test('Height method should specify correct height', function(assert) {
+QUnit.test('height method specifies correct height', function(assert) {
   const done = assert.async();
   const frame = {
     'height' : '0px',
@@ -74,7 +74,7 @@ QUnit.test('Height method should specify correct height', function(assert) {
     });
 });
 
-QUnit.test('Width method should specify correct width', function(assert) {
+QUnit.test('width method specifies correct width', function(assert) {
   const done = assert.async();
   const frame = {
     'height' : '0px',
