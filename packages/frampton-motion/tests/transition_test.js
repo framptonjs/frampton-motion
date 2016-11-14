@@ -20,7 +20,7 @@ QUnit.module('Frampton.Motion.describe', {
   }
 });
 
-QUnit.test('Should run callback on complete transition sequence', function(assert) {
+QUnit.test('Should run callback on complete transition', function(assert) {
   const done = assert.async();
   const frame = {
     'height' : '0px',

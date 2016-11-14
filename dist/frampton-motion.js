@@ -212,7 +212,7 @@ define("frampton-motion/sequence", ["exports"], function (exports) {
     });
   }
 });
-define('frampton-motion/transition', ['exports', 'frampton-utils/is_something', 'frampton-utils/is_string', 'frampton-utils/guid', 'frampton-utils/not_implemented', 'frampton-list/add', 'frampton-list/remove', 'frampton-list/reverse', 'frampton-record/merge', 'frampton-motion/sequence', 'frampton-motion/utils/set_state', 'frampton-motion/utils/inverse_direction', 'frampton-motion/utils/default_run', 'frampton-motion/utils/transition_props', 'frampton-motion/utils/parsed_props', 'frampton-motion/utils/parsed_timing', 'frampton-motion/utils/update_transform', 'frampton-motion/utils/validated_transition', 'frampton-motion/data/constants'], function (exports, _is_something, _is_string, _guid, _not_implemented, _add, _remove, _reverse, _merge, _sequence, _set_state, _inverse_direction, _default_run, _transition_props, _parsed_props, _parsed_timing, _update_transform, _validated_transition, _constants) {
+define('frampton-motion/transition', ['exports', 'frampton-utils/is_something', 'frampton-utils/is_string', 'frampton-utils/guid', 'frampton-utils/not_implemented', 'frampton-list/add', 'frampton-list/remove', 'frampton-list/reverse', 'frampton-object/merge', 'frampton-motion/sequence', 'frampton-motion/utils/set_state', 'frampton-motion/utils/inverse_direction', 'frampton-motion/utils/default_run', 'frampton-motion/utils/transition_props', 'frampton-motion/utils/parsed_props', 'frampton-motion/utils/parsed_timing', 'frampton-motion/utils/update_transform', 'frampton-motion/utils/validated_transition', 'frampton-motion/data/constants'], function (exports, _is_something, _is_string, _guid, _not_implemented, _add, _remove, _reverse, _merge, _sequence, _set_state, _inverse_direction, _default_run, _transition_props, _parsed_props, _parsed_timing, _update_transform, _validated_transition, _constants) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -1050,7 +1050,7 @@ define("frampton-motion/utils/once", ["exports"], function (exports) {
     };
   }
 });
-define('frampton-motion/utils/parsed_props', ['exports', 'frampton-record/reduce', 'frampton-list/contains', 'frampton-style/supported', 'frampton-motion/data/transitions'], function (exports, _reduce, _contains, _supported, _transitions) {
+define('frampton-motion/utils/parsed_props', ['exports', 'frampton-object/reduce', 'frampton-list/contains', 'frampton-style/supported', 'frampton-motion/data/transitions'], function (exports, _reduce, _contains, _supported, _transitions) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {

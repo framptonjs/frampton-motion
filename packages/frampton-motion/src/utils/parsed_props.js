@@ -1,4 +1,4 @@
-import reduceObj from 'frampton-record/reduce';
+import reduceObj from 'frampton-object/reduce';
 import listContains from 'frampton-list/contains';
 import supported from 'frampton-style/supported';
 import transitions from 'frampton-motion/data/transitions';

@@ -5,7 +5,7 @@ import notImplemented from 'frampton-utils/not_implemented';
 import addToList from 'frampton-list/add';
 import removeFromList from 'frampton-list/remove';
 import reverse from 'frampton-list/reverse';
-import merge from 'frampton-record/merge';
+import merge from 'frampton-object/merge';
 import sequence from 'frampton-motion/sequence';
 import setState from 'frampton-motion/utils/set_state';
 import inverseDirection from 'frampton-motion/utils/inverse_direction';
