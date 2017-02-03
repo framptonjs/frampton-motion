@@ -1,6 +1,7 @@
 {
   "name": "frampton-motion",
   "version": "0.1.2",
+  "main": "./dist/frampton-motion.js",
   "description": "A module for frampton.js to manage CSS transitions in JavaScript",
   "scripts": {
     "test": "frampton test",
@@ -21,10 +22,12 @@
     "url": "https://github.com/framptonjs/frampton-motion/issues"
   },
   "homepage": "https://github.com/framptonjs/frampton-motion",
+  "dependencies": {
+    "frampton": "0.3.5"
+  },
   "devDependencies": {
-    "frampton": "0.3.1",
-    "frampton-build": "0.0.6",
-    "frampton-cli": "0.0.10",
+    "frampton-build": "0.0.7",
+    "frampton-cli": "0.0.12",
     "jsdoc": "3.4.0"
   }
 }
